@@ -1,0 +1,9 @@
+export const user = "user";
+export const search = "search";
+export const getFriendRequest = "get-friend-request";
+export const friends = "get-friends";
+export const conversation = "get-conversation";
+export const conversations = "get-conversations";
+export const conversationMessages = "get-conversation-messages";
+export const roomsJoined = "rooms-joined";
+export const chatting = "chatting";
