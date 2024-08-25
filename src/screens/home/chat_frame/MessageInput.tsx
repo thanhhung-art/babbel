@@ -13,10 +13,10 @@ import useAppStore from "../../../lib/zustand/store";
 import Arrow from "../../../assets/icons/Arrow";
 import ImageIcon from "../../../assets/icons/ImageIcon";
 //import VideoIcon from "../../../assets/icons/VideoIcon";
-import { sendFileToServer } from "../../../utils/file";
+import { handleFileUploads } from "../../../utils/file";
 const Picker = lazy(() => import("@emoji-mart/react"));
 import EmojiIcon from "../../../assets/icons/EmojiIcon";
-import { IFile } from "../../../types/file";
+import { IFileUpload } from "../../../types/file";
 
 const MessageInput = () => {
   const currConversationId = useAppStore(
@@ -32,9 +32,9 @@ const MessageInput = () => {
     conversationId: "",
   });
   const [images, setImages] = useState<string[]>([]);
-  const filesBufferRef = useRef<IFile[]>([]);
   const [openEmoji, setOpenEmoji] = useState(false);
   const [emojiData, setEmojiData] = useState<unknown>(null);
+  const fileUploadRef = useRef<IFileUpload>({});
 
   const handleSendMessage = async () => {
     if (!inputRef.current?.value) return;
@@ -49,14 +49,27 @@ const MessageInput = () => {
           content: inputRef.current.value,
         });
       } else {
-        socket.emit("send-message-to-room", {
-          roomId: currentRoomId,
-          content: inputRef.current?.value,
-          files: images.length > 0 ? true : false,
-        });
+        if (Object.keys(fileUploadRef.current).length > 0) {
+          const res = await handleFileUploads(fileUploadRef.current);
+          const urls = res
+            .map((r) => r.map((file) => file.fileData))
+            .flat()
+            .filter((url) => url);
+          socket.emit("send-message-to-room", {
+            roomId: currentRoomId,
+            content: inputRef.current?.value,
+            files: urls,
+          });
+        } else {
+          socket.emit("send-message-to-room", {
+            roomId: currentRoomId,
+            content: inputRef.current?.value,
+          });
+        }
       }
 
       inputRef.current.value = "";
+      fileUploadRef.current = {};
       setImages([]);
     } else {
       alert(`Message should be less than ${limit} characters`);
@@ -86,51 +99,36 @@ const MessageInput = () => {
     setOpenEmoji(!openEmoji);
   };
 
-  const arrayBufferToBase64 = (buffer: ArrayBuffer): string => {
-    let binary = "";
-    const bytes = new Uint8Array(buffer);
-    const len = bytes.byteLength;
-    for (let i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return window.btoa(binary);
-  };
-
   const handleSelectFile = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
-      const base64Images: string[] = [];
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const reader = new FileReader();
+        const fileName = crypto.randomUUID() + "." + file.type.split("/")[1];
+        const totalChunks = Math.ceil(file.size / (64 * 1024));
 
-        reader.onload = () => {
-          const arrayBuffer = reader.result as ArrayBuffer;
-          filesBufferRef.current.push({
-            data: arrayBuffer,
-            type: file.type,
-            name: file.name,
-            size: file.size,
-          });
-          const base64String = arrayBufferToBase64(arrayBuffer);
-
-          let dataUrlPrefix = "";
-          if (file.type === "image/png") {
-            dataUrlPrefix = "data:image/png;base64,";
-          } else if (file.type === "image/jpeg") {
-            dataUrlPrefix = "data:image/jpeg;base64,";
+        for (let j = 0; j < file.size; j += 64 * 1024) {
+          const chunk = file.slice(j, j + 64 * 1024);
+          if (!fileUploadRef.current[fileName]) {
+            fileUploadRef.current[fileName] = {
+              chunks: [chunk],
+              size: file.size,
+              name: fileName,
+              type: file.type,
+              totalChunks,
+            };
+          } else {
+            fileUploadRef.current[fileName].chunks.push(chunk);
           }
-          base64Images.push(dataUrlPrefix + base64String);
+        }
 
-          if (base64Images.length === files.length) {
-            setImages([...images, ...base64Images]);
+        const reader = new FileReader();
+        reader.onload = () => {
+          if (typeof reader.result === "string") {
+            setImages([...images, reader.result]);
           }
         };
-
-        reader.readAsArrayBuffer(file);
-        setTimeout(() => {
-          console.log(filesBufferRef.current);
-        }, 1000);
+        reader.readAsDataURL(file);
       }
     }
   };
@@ -188,16 +186,8 @@ const MessageInput = () => {
       }
     );
 
-    socket.on(
-      "get-message-attachment-id-to-save-files",
-      (messageAttachmentId: string) => {
-        sendFileToServer(filesBufferRef.current, messageAttachmentId);
-      }
-    );
-
     return () => {
       socket.off("friend-typing-message");
-      socket.off("get-message-attachment-id-to-save-files");
     };
   }, []);
 

@@ -7,10 +7,20 @@ export interface IMessage {
   conversationId?: string;
   roomId?: string;
   user?: { name: string };
-  attachments?: MessageAttachment[];
+  messageAttachment?: MessageAttachment;
+  files: IFileAttachment[];
 }
 
 interface MessageAttachment {
+  id: string;
+  messageId: string;
+  type: string;
+  createdAt: Date;
+  udpateAt: Date;
+  files: IFileAttachment[];
+}
+
+interface IFileAttachment {
   id: string;
   messageId: string;
   url: string;

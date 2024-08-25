@@ -99,6 +99,12 @@ const Message = ({
           )}
         </div>
       </div>
+      {message.files &&
+        message.files.map((file, index) => (
+          <div key={index} className={`${isUser && "flex justify-end"} mt-4`}>
+            <img src={file.url} alt="image" className="rounded-lg" />
+          </div>
+        ))}
       <div className={`${isUser && "flex justify-end"}`}>
         {username && !isUser && currentRoomId && (
           <span className="text-gray-600 text-[14px] ml-2 mr-8">
