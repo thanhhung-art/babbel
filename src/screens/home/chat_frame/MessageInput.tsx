@@ -42,30 +42,28 @@ const MessageInput = () => {
     const limit = 500;
 
     if (inputRef.current.value.length <= limit) {
+      let urls: string[] = [];
+      // if there are files to upload
+      if (Object.keys(fileUploadRef.current).length > 0) {
+        const res = await handleFileUploads(fileUploadRef.current);
+        urls = res
+          .map((r) => r.map((file) => file.fileData))
+          .flat()
+          .filter((url) => url);
+      }
       if (currConversationId && currentFriendId) {
         socket.emit("send-message-to-user", {
           conversationId: currConversationId,
           friendId: currentFriendId,
           content: inputRef.current.value,
+          urls,
         });
       } else {
-        if (Object.keys(fileUploadRef.current).length > 0) {
-          const res = await handleFileUploads(fileUploadRef.current);
-          const urls = res
-            .map((r) => r.map((file) => file.fileData))
-            .flat()
-            .filter((url) => url);
-          socket.emit("send-message-to-room", {
-            roomId: currentRoomId,
-            content: inputRef.current?.value,
-            files: urls,
-          });
-        } else {
-          socket.emit("send-message-to-room", {
-            roomId: currentRoomId,
-            content: inputRef.current?.value,
-          });
-        }
+        socket.emit("send-message-to-room", {
+          roomId: currentRoomId,
+          content: inputRef.current?.value,
+          urls,
+        });
       }
 
       inputRef.current.value = "";

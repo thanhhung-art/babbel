@@ -102,7 +102,11 @@ const Message = ({
       {message.files &&
         message.files.map((file, index) => (
           <div key={index} className={`${isUser && "flex justify-end"} mt-4`}>
-            <img src={file.url} alt="image" className="rounded-lg" />
+            <img
+              src={file.url}
+              alt="image"
+              className="rounded-lg max-w-[700px] h-auto"
+            />
           </div>
         ))}
       <div className={`${isUser && "flex justify-end"}`}>
