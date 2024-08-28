@@ -104,6 +104,12 @@ const Messages = () => {
     handleCloseDeleteDialog();
   };
 
+  const handleScrollIntoView = () => {
+    if (anchorRef.current) {
+      anchorRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   useEffect(() => {
     if (data) {
       setMessages(data);
@@ -205,6 +211,7 @@ const Messages = () => {
               idMessageToDelete={idMessageToDelete}
               idMessageToUpdate={idMessageToUpdate}
               username={message.user?.name}
+              handleScrollIntoView={handleScrollIntoView}
             />
           );
         })}

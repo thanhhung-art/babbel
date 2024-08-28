@@ -37,11 +37,15 @@ const MessageInput = () => {
   const fileUploadRef = useRef<IFileUpload>({});
 
   const handleSendMessage = async () => {
-    if (!inputRef.current?.value) return;
+    if (
+      !inputRef.current?.value &&
+      Object.keys(fileUploadRef.current).length === 0
+    )
+      return;
 
     const limit = 500;
 
-    if (inputRef.current.value.length <= limit) {
+    if (inputRef.current && inputRef.current.value.length <= limit) {
       let urls: string[] = [];
       // if there are files to upload
       if (Object.keys(fileUploadRef.current).length > 0) {
@@ -138,19 +142,16 @@ const MessageInput = () => {
   };
 
   useEffect(() => {
-    const addKeyDownEvent = (e: KeyboardEvent) => {
+    const pressEnter = (e: KeyboardEvent) => {
       if (e.key === "Enter") {
         handleSendMessage();
       }
     };
-    if (inputRef.current) {
-      // add event listener to inputRef when press enter
-      inputRef.current.addEventListener("keydown", addKeyDownEvent);
-    }
+    document.addEventListener("keydown", pressEnter);
 
     return () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      inputRef.current?.removeEventListener("keydown", addKeyDownEvent);
+      document.removeEventListener("keydown", pressEnter);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
