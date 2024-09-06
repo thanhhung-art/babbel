@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import BellIcon from "../../assets/icons/BellIcon";
 import Avatar from "../../components/Avatar";
-import Search from "../../components/Search";
 import useAppStore from "../../lib/zustand/store";
 import { verifyUser } from "../../lib/react_query/queries";
 
@@ -16,9 +15,6 @@ const Navbar = () => {
     <nav className="border p-4 flex justify-between items-center">
       <h2>Chat app</h2>
       <ul className="flex gap-8 items-center">
-        <li>
-          <Search />
-        </li>
         <li>
           <BellIcon w={40} h={40} />
         </li>
