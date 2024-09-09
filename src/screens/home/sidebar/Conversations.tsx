@@ -11,6 +11,9 @@ const Conversations = () => {
 
   if (isLoading) return <div>Loading...</div>;
 
+  if (data?.length === 0)
+    return <h3 className="text-center mt-4 text-slate-600">No conversations</h3>;
+
   return (
     <>
       {data &&
