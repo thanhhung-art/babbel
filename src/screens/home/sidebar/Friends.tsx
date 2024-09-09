@@ -44,7 +44,12 @@ const Friends = () => {
               className="flex gap-4 items-center p-2 cursor-pointer rounded hover:bg-slate-100"
               onClick={() => handleGetConvesation(friend.id)}
             >
-              <Avatar width="w-12" height="h-12" name={friend.name} />
+              <div className="relative">
+                <Avatar width="w-12" height="h-12" name={friend.name} />
+                <div
+                  className={`absolute bg-green-500 w-3 h-3 rounded-full bottom-0 right-0 border-2 border-white`}
+                ></div>
+              </div>
               <div>{friend.name}</div>
             </li>
           ))}
