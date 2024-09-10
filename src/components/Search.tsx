@@ -1,4 +1,4 @@
-import { ChangeEvent, createRef, useRef } from "react";
+import { ChangeEvent, createRef, useRef, useState } from "react";
 import SearchIcon from "../assets/icons/SearchIcon";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
@@ -11,39 +11,54 @@ import Avatar from "./Avatar";
 import PlusIcon from "../assets/icons/PlusIcon";
 import { sendFriendRequestQuery } from "../lib/react_query/queries";
 import XIcon from "../assets/icons/XIcon";
+import SuccessIcon from "../assets/icons/SuccessIcon";
+import { user } from "../utils/contants";
 
-const Search = () => {
+interface IProps {
+  type: "user" | "room";
+}
+
+const Search = ({ type }: IProps) => {
   const inputValue = useRef<HTMLInputElement>(null);
-  const debounceSearchRef = useRef<number | null>(null);
+  const debounceSearchRef = useRef<NodeJS.Timeout | null>(null);
   const selectRef = createRef<HTMLSelectElement>();
-  const searchType = useRef<"user" | "room">("user");
+  const searchType = useRef<string>("user");
+  const [sendJoinRequestRoom, setSendJoinRequestRoom] = useState<string[]>([]);
+  const [sendFriendRequestUser, setSendFriendRequestUser] = useState<string[]>(
+    []
+  );
 
-  const userData = useQuery({ queryKey: ["user"], queryFn: verifyUser });
+  const userData = useQuery({ queryKey: [user], queryFn: verifyUser });
 
   const searchMutation = useMutation<User[]>({
     mutationFn: async () => {
       return await search(
         inputValue.current?.value || "",
-        selectRef.current?.value as "user" | "room"
+        type,
+        selectRef.current?.value as
+          | "joined"
+          | "joined"
+          | "unfriend"
+          | "unjoined"
       );
     },
   });
 
   const sendFriendRequest = useMutation({
-    mutationFn: async ({
-      userId,
-      friendId,
-    }: {
-      userId: string;
-      friendId: string;
-    }) => {
-      return await sendFriendRequestQuery(userId, friendId);
+    mutationFn: ({ friendId }: { friendId: string }) => {
+      return sendFriendRequestQuery(friendId);
+    },
+    onSuccess: (res) => {
+      setSendFriendRequestUser((prev) => [...prev, res.friendId]);
     },
   });
 
   const sendJoinRoom = useMutation({
     mutationFn: async (roomId: string) => {
       return await requestJoinRoomQuery(roomId);
+    },
+    onSuccess: (res) => {
+      setSendJoinRequestRoom((prev) => [...prev, res.roomId]);
     },
   });
 
@@ -59,11 +74,16 @@ const Search = () => {
     }
   };
 
-  const handleSendFriendRequest = (userId: string, friendId: string) => {
-    sendFriendRequest.mutate({ userId, friendId });
+  const handleSendFriendRequest = (friendId: string) => {
+    if (userData.data?.id !== friendId && friendId) {
+      sendFriendRequest.mutate({ friendId });
+    }
   };
 
   const handleSendJoinRoom = (roomId: string) => {
+    if (sendJoinRequestRoom.includes(roomId)) {
+      return;
+    }
     sendJoinRoom.mutate(roomId);
   };
 
@@ -73,7 +93,11 @@ const Search = () => {
   };
 
   const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    searchType.current = e.target.value as "user" | "room";
+    searchType.current = e.target.value as
+      | "friend"
+      | "joined"
+      | "unfriend"
+      | "unjoined";
     searchMutation.reset();
   };
 
@@ -81,7 +105,7 @@ const Search = () => {
 
   return (
     <div className="z-50">
-      <div className="flex items-center rounded-2xl shadow px-4 py-2 relative z-50">
+      <div className="flex items-center rounded border border-slate-300 px-4 py-2 relative z-50">
         <label htmlFor="searchInput"></label>
         <input
           ref={inputValue}
@@ -106,38 +130,52 @@ const Search = () => {
           ref={selectRef}
           onChange={handleSelectChange}
         >
-          <option value="user">user</option>
-          <option value="room">room</option>
+          <option value={type === "user" ? "friend" : "joined"}>
+            {type === "user" ? "friend" : "joined"}
+          </option>
+          <option value={type === "user" ? "unfriend" : "unjoined"}>
+            {type === "user" ? "unfriend" : "unjoined"}
+          </option>
         </select>
 
-        {searchType.current === "user" && renderSearchData && (
+        {type === "user" && renderSearchData && (
           <div className="absolute top-full left-0 bg-white w-full border p-4 rounded-lg">
-            {searchMutation.data &&
-              searchMutation.data.map((item) => (
-                <div key={item.id} className="flex gap-4">
-                  <Avatar width={"w-12"} height={"h-12"} name={item.name} />
-                  <div className="flex items-center justify-between w-full">
-                    <h3 className="">{item.name}</h3>
-                    <div
-                      className="cursor-pointer border rounded-full"
-                      onClick={() =>
-                        handleSendFriendRequest(
-                          userData.data?.id || "",
-                          item.id
-                        )
-                      }
-                    >
-                      <PlusIcon w={16} h={16} />
+            <ul className="flex flex-col gap-2">
+              {searchMutation.data && searchMutation.data.length > 0 ? (
+                searchMutation.data.map((item) => (
+                  <li key={item.id} className="flex gap-4">
+                    <Avatar width={"w-12"} height={"h-12"} name={item.name} />
+                    <div className="flex items-center justify-between w-full">
+                      <h3 className="">{item.name}</h3>
+                      {userData.data?.id !== item.id ? (
+                        <div
+                          className="cursor-pointer border rounded-full"
+                          onClick={() => handleSendFriendRequest(item.id)}
+                        >
+                          {sendFriendRequestUser.includes(item.id) ? (
+                            <SuccessIcon w={16} h={16} />
+                          ) : (
+                            <PlusIcon w={16} h={16} />
+                          )}
+                        </div>
+                      ) : (
+                        <p>you</p>
+                      )}
                     </div>
-                  </div>
-                </div>
-              ))}
+                  </li>
+                ))
+              ) : (
+                <li className="">
+                  <p className="text-center">No results</p>
+                </li>
+              )}
+            </ul>
           </div>
         )}
 
-        {searchType.current === "room" && renderSearchData && (
+        {type === "room" && renderSearchData && (
           <div className="absolute top-full left-0 bg-white w-full border p-4 rounded-lg">
-            {searchMutation.data &&
+            {searchMutation.data && searchMutation.data.length > 0 ? (
               searchMutation.data.map((item) => (
                 <div key={item.id} className="flex gap-4 items-center">
                   <Avatar width={"w-12"} height={"h-12"} name={item.name} />
@@ -146,10 +184,17 @@ const Search = () => {
                     className="cursor-pointer border rounded-full ml-auto "
                     onClick={() => handleSendJoinRoom(item.id)}
                   >
-                    <PlusIcon w={16} h={16} />
+                    {sendJoinRequestRoom.includes(item.id) ? (
+                      <SuccessIcon w={16} h={16} />
+                    ) : (
+                      <PlusIcon w={16} h={16} />
+                    )}
                   </div>
                 </div>
-              ))}
+              ))
+            ) : (
+              <p className="text-center">No results</p>
+            )}
           </div>
         )}
       </div>
