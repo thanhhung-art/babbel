@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import BellIcon from "../../assets/icons/BellIcon";
 import Avatar from "../../components/Avatar";
 import useAppStore from "../../lib/zustand/store";
-import { verifyUser } from "../../lib/react_query/queries";
+import { verifyUser } from "../../lib/react_query/queries/user/user";
 
 const Navbar = () => {
   const toggleSidebarRight = useAppStore((state) => state.toggleSidebarRight);

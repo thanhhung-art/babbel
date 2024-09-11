@@ -4,7 +4,6 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   requestJoinRoomQuery,
   search,
-  verifyUser,
 } from "../lib/react_query/queries";
 import { User } from "../types/user";
 import Avatar from "./Avatar";
@@ -13,6 +12,7 @@ import { sendFriendRequestQuery } from "../lib/react_query/queries";
 import XIcon from "../assets/icons/XIcon";
 import SuccessIcon from "../assets/icons/SuccessIcon";
 import { user } from "../utils/contants";
+import { verifyUser } from "../lib/react_query/queries/user/user";
 
 interface IProps {
   type: "user" | "room";

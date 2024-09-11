@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { verifyUser } from "../../lib/react_query/queries";
+import { verifyUser } from "../../lib/react_query/queries/user/user";
 
 const Index = () => {
   const email = useRef<HTMLInputElement>(null);

@@ -6,8 +6,8 @@ import Navbar from "./Navbar";
 import SidebarRight from "./sidebarRight/sidebarRight";
 import { user } from "../../utils/contants";
 import { useQuery } from "@tanstack/react-query";
-import { verifyUser } from "../../lib/react_query/queries";
 import useAppStore from "../../lib/zustand/store";
+import { verifyUser } from "../../lib/react_query/queries/user/user";
 
 const Home = () => {
   const setOnlineFriends = useAppStore((state) => state.setOnlineFriends);
