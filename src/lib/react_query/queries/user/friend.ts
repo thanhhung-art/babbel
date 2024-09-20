@@ -74,7 +74,7 @@ export async function getConversationMessagesQuery(
   return res.json();
 }
 
-export async function getConversationChattingQuery(): Promise<IChatting[]> {
+export async function getChattingQuery(): Promise<IChatting[]> {
   const res = await fetch(`${apiUrl}/user/chatting`, {
     method: "GET",
     headers: {

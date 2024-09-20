@@ -2,16 +2,33 @@ import { User } from "../../../../types/user";
 import { apiUrl } from "../ApiUrl";
 
 export async function verifyUser(): Promise<User> {
-  return await fetch(apiUrl + "/auth/user", {
+  const res = await fetch(apiUrl + "/auth/user", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
     credentials: "include",
-  })
-    .then((res) => res.json())
-    .then((data) => data.user)
-    .catch((err) => {
-      throw new Error(err.message);
-    });
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to verify user");
+  }
+
+  return res.json();
+}
+
+export async function removeChattingConveration(id: string) {
+  const res = await fetch(apiUrl + "/user/chatting/" + id, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to remove conversation");
+  }
+
+  return res.json();
 }
