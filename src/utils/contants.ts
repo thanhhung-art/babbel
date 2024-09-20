@@ -7,3 +7,7 @@ export const conversations = "get-conversations";
 export const conversationMessages = "get-conversation-messages";
 export const roomsJoined = "rooms-joined";
 export const chatting = "chatting";
+export const room = "room";
+export const members = "members";
+export const joinRequest = "join-request";
+export const banned = "banned";
