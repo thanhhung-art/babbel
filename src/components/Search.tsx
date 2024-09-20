@@ -1,18 +1,16 @@
 import { ChangeEvent, createRef, useRef, useState } from "react";
 import SearchIcon from "../assets/icons/SearchIcon";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import {
-  requestJoinRoomQuery,
-  search,
-} from "../lib/react_query/queries";
 import { User } from "../types/user";
 import Avatar from "./Avatar";
 import PlusIcon from "../assets/icons/PlusIcon";
-import { sendFriendRequestQuery } from "../lib/react_query/queries";
 import XIcon from "../assets/icons/XIcon";
 import SuccessIcon from "../assets/icons/SuccessIcon";
 import { user } from "../utils/contants";
 import { verifyUser } from "../lib/react_query/queries/user/user";
+import { requestJoinRoomQuery } from "../lib/react_query/queries/room/room";
+import { sendFriendRequestQuery } from "../lib/react_query/queries/user/friendRequest";
+import { search } from "../lib/react_query/queries/utils";
 
 interface IProps {
   type: "user" | "room";
@@ -125,7 +123,7 @@ const Search = ({ type }: IProps) => {
           <SearchIcon />
         </div>
         <select
-          title="search-select"
+          title="searchIcon-select"
           className="ml-3 rounded-lg outline-none bg-white"
           ref={selectRef}
           onChange={handleSelectChange}
