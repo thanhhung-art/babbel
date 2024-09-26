@@ -11,6 +11,13 @@ export interface IConversaton {
   updateAt: Date;
 }
 
+export interface IConversationQuery {
+  id: string;
+  participants: User[];
+  createdAt: Date;
+  updateAt: Date;
+}
+
 export interface IChatting {
   id: string;
   userId: string;
