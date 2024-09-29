@@ -103,12 +103,11 @@ const Conversation = ({ conversation, handleRemoveChatting }: IProps) => {
           </div>
           <h3>{conversationName}</h3>
         </div>
-        <div className="relative" onClick={handleDotMenuClick}>
+        <div className="relative" onClick={handleDotMenuClick} ref={optionsContainer}>
           <DotMenuIcon />
           {isButtonVisible && (
             <div
               className="absolute right-full top-0 rounded shadow bg-white"
-              ref={optionsContainer}
             >
               <div className="flex flex-col p-2">
                 <div
