@@ -1,23 +1,23 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { friends } from "../../../../utils/contants";
-import {
-  blockUserQuery,
-  getConversationQuery,
-  getFriends,
-  unfriendQuery,
-} from "../../../../lib/react_query/queries";
+import { chatting, friends } from "../../../../utils/contants";
 import Search from "../../../../components/Search";
 import useAppStore from "../../../../lib/zustand/store";
 import Friend from "./Friend";
 import { useRef, useState } from "react";
 import XIcon from "../../../../assets/icons/XIcon";
+import {
+  getFriends,
+  getConversationQuery,
+  blockUserQuery,
+  unfriendQuery,
+} from "../../../../lib/react_query/queries/user/friend";
 
 const Friends = () => {
   const queryClient = useQueryClient();
   const setCurrentFriendId = useAppStore((state) => state.setCurrentFriendId);
   const setCurrentRoomId = useAppStore((state) => state.setCurrentRoomId);
   const setCurrentConversationId = useAppStore(
-    (state) => state.setCurrentConversationId
+    (state) => state.setCurrentConversationId,
   );
   const [dialogType, setDialogType] = useState<"block" | "unfriend" | "">("");
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -31,6 +31,7 @@ const Friends = () => {
       setCurrentFriendId(data.participants[0].id);
       setCurrentConversationId(data.id);
       setCurrentRoomId("");
+      queryClient.invalidateQueries({ queryKey: [chatting] });
     },
   });
 
@@ -93,6 +94,7 @@ const Friends = () => {
           {data &&
             data.map((friend) => (
               <Friend
+                key={friend.id}
                 friend={friend}
                 handleGetConversation={handleGetConversation}
                 handleBlockUser={handleBlockUser}

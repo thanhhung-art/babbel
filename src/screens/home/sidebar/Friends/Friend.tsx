@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { createRef, useEffect, useState } from "react";
 import DotMenuIcon from "../../../../assets/icons/DotMenuIcon";
 import Avatar from "../../../../components/Avatar";
+import UnfriendIcon from "../../../../assets/icons/UnfriendIcon";
+import BlockIcon from "../../../../assets/icons/BlockIcon";
 
 interface IProps {
   friend: { id: string; name: string };
@@ -16,20 +18,31 @@ const Friend = ({
   handleUnfriendUser,
 }: IProps) => {
   const [showOptions, setShowOptions] = useState(false);
+  const optionsContainer = createRef<HTMLDivElement>();
 
   const handleToggleOptions = () => {
     setShowOptions((prev) => !prev);
   };
 
-  const handleCloseShowOptions = () => {
-    setShowOptions(false);
-  };
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        optionsContainer.current &&
+        !optionsContainer.current.contains(e.target as Node)
+      ) {
+        setShowOptions(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [optionsContainer]);
 
   return (
-    <li
-      className="flex justify-between items-center p-2 cursor-pointer rounded hover:bg-slate-100"
-      onMouseLeave={handleCloseShowOptions}
-    >
+    <li className="flex justify-between items-center p-2 cursor-pointer rounded hover:bg-slate-100">
       <div
         className="flex gap-4 items-center w-full"
         onClick={() => handleGetConversation(friend.id)}
@@ -42,23 +55,29 @@ const Friend = ({
         </div>
         <h4 className="">{friend.name}</h4>
       </div>
-      <div className="ml-auto relative" onClick={handleToggleOptions}>
+      <div
+        className="ml-auto relative"
+        onClick={handleToggleOptions}
+        ref={optionsContainer}
+      >
         <DotMenuIcon w={24} h={24} />
         {showOptions && (
           <div className="absolute top-0 right-full">
             <div className="bg-white p-2 rounded-lg shadow">
-              <button
+              <div
                 onClick={() => handleBlockUser(friend.id)}
-                className="w-full text-sm"
+                className="w-full flex justify-between items-end cursor-pointer p-1 hover:bg-slate-100 active:bg-slate-200"
               >
-                Block
-              </button>
-              <button
-                className="w-full text-sm text-red-500"
+                <span className="text-sm w-16">Block</span>
+                <BlockIcon width={24} height={24} />
+              </div>
+              <div
+                className="w-full flex justify-between items-end cursor-pointer p-1 hover:bg-slate-100 active:bg-slate-200"
                 onClick={() => handleUnfriendUser(friend.id)}
               >
-                Unfriend
-              </button>
+                <span className="text-sm text-red-500 w-16">Unfriend</span>
+                <UnfriendIcon width={24} height={24} />
+              </div>
             </div>
           </div>
         )}
