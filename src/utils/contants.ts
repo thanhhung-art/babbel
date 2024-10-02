@@ -11,3 +11,4 @@ export const room = "room";
 export const members = "members";
 export const joinRequest = "join-request";
 export const banned = "banned";
+export const checkAdmin = "check-admin";

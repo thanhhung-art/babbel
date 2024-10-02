@@ -32,3 +32,21 @@ export async function removeChattingConveration(id: string) {
 
   return res.json();
 }
+
+export async function checkRoomAdminQuery(
+  id: string
+): Promise<{ isAdmin: boolean }> {
+  const res = await fetch(apiUrl + "/user/check-admin/" + id, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    throw new Error(res.statusText);
+  }
+
+  return await res.json();
+}
