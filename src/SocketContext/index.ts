@@ -1,12 +1,12 @@
 import { createContext, Dispatch } from "react";
 import { ACTIONS_TYPE } from "./actions";
-import { Room } from "../types/room";
+import { IRoom } from "../types/room";
 import { User } from "../types/user";
 
 export interface InitialState {
   user: User | null;
   users: User[];
-  rooms: Room[];
+  rooms: IRoom[];
   usersOnline: { id: string; socketId: string }[];
   friends: string[];
   request: string[];
@@ -28,7 +28,7 @@ export const initialState: InitialState = {
   request: [],
   authencated: false,
   currUserId: "",
-  currRoomId: '',
+  currRoomId: "",
   otherId: "",
   isOpenChat: false,
   openList: false,
