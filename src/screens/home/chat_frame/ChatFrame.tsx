@@ -1,6 +1,9 @@
+import { lazy, Suspense } from "react";
 import useAppStore from "../../../lib/zustand/store";
-import MessageInput from "./MessageInput";
-import Messages from "./Messages";
+const ConversationBar = lazy(() => import("./ConversationBar"));
+const MessageInput = lazy(() => import("./MessageInput"));
+const Messages = lazy(() => import("./Messages/Messages"));
+const RoomBar = lazy(() => import("./RoomBar"));
 
 const ChatFrame = () => {
   const currConversationId = useAppStore(
@@ -9,12 +12,14 @@ const ChatFrame = () => {
   const currRoomId = useAppStore((state) => state.currentRoomId);
 
   return (
-    <main className="h-full bg-slate-100 relative">
+    <main className="h-full flex flex-col bg-slate-100">
       {currConversationId || currRoomId ? (
-        <>
-          <Messages />
+        <Suspense>
+          {currRoomId && <RoomBar />}
+          {currConversationId && <ConversationBar />}
+          <Messages />  
           <MessageInput />
-        </>
+        </Suspense>
       ) : (
         <p className="text-center pt-16">No conversation selected</p>
       )}
