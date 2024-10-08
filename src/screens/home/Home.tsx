@@ -3,7 +3,6 @@ import { socket } from "../../SocketContext/socket";
 import Sidebar from "./sidebar/Sidebar";
 import ChatFrame from "./chat_frame/ChatFrame";
 import Navbar from "./Navbar";
-import SidebarRight from "./sidebarRight/sidebarRight";
 import { user } from "../../utils/contants";
 import { useQuery } from "@tanstack/react-query";
 import useAppStore from "../../lib/zustand/store";
@@ -50,7 +49,6 @@ const Home = () => {
         <div className="w-3/4">
           <ChatFrame />
         </div>
-        <SidebarRight />
       </div>
     </div>
   );
