@@ -1,14 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { conversationMessages, user } from "../../../utils/contants";
-import {
-  getConversationMessagesQuery,
-  verifyUser,
-} from "../../../lib/react_query/queries";
-import useAppStore from "../../../lib/zustand/store";
+import { conversationMessages, user } from "../../../../utils/contants";
+import useAppStore from "../../../../lib/zustand/store";
 import { createRef, useEffect, useRef, useState } from "react";
-import { IMessage } from "../../../types/message";
-import { socket } from "../../../SocketContext/socket";
-import Message from "./Message";
+import { IMessage } from "../../../../types/message";
+import { socket } from "../../../../SocketContext/socket";
+import Message from "././Message";
+import { verifyUser } from "../../../../lib/react_query/queries/user/user";
+import { getConversationMessagesQuery } from "../../../../lib/react_query/queries/user/friend";
 
 const Messages = () => {
   const currentConversationId = useAppStore(
@@ -197,7 +195,7 @@ const Messages = () => {
 
   return (
     <>
-      <div className="flex flex-col gap-4 h-full overflow-auto border pt-4 px-4 pb-16">
+      <div className="flex-grow overflow-auto pt-4 px-4">
         {messages.map((message) => {
           const isUser = userData.data?.id === message.userId;
 

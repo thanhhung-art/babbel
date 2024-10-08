@@ -1,7 +1,9 @@
-import { MutableRefObject, useEffect, useMemo, useState } from "react";
-import { IMessage } from "../../../types/message";
-import { timeAgo } from "../../../utils/timeAgo";
-import Avatar from "../../../components/Avatar";
+import { MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
+import { IMessage } from "../../../../types/message";
+import { timeAgo } from "../../../../utils/timeAgo";
+import Avatar from "../../../../components/Avatar";
+import DeleteIcon from "../../../../assets/icons/DeleteIcon";
+import UpdateIcon from "../../../../assets/icons/UpdateIcon";
 interface IProps {
   message: IMessage;
   isUser: boolean;
@@ -24,6 +26,7 @@ const Message = ({
   handleScrollIntoView,
 }: IProps) => {
   const [showOptions, setShowOptions] = useState(false);
+  const optionsContainerRef = useRef<HTMLDivElement>(null);
   const date = useMemo(
     () => timeAgo(message.createdAt || ""),
     [message.createdAt]
@@ -36,13 +39,17 @@ const Message = ({
     setShowOptions(false);
   };
 
+  const handleClickOutside = (e: MouseEvent) => {
+    if (
+      optionsContainerRef.current &&
+      !optionsContainerRef.current.contains(e.target as Node)
+    ) {
+      setShowOptions(false);
+    }
+  };
+
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
-      // entries.forEach((entry) => {
-      //   if (!entry.isIntersecting) {
-      //     handleScrollIntoView();
-      //   }
-      // });
       if (!entries[entries.length - 1].isIntersecting) {
         handleScrollIntoView();
       }
@@ -54,9 +61,17 @@ const Message = ({
     });
   }, [message.files, handleScrollIntoView]);
 
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div
-      className={`flex ${isUser && "justify-end"} group`}
+      className={`flex ${isUser && "justify-end"} group mt-2`}
       onMouseLeave={handleMouseLeave}
     >
       <div className="flex gap-4">
@@ -77,13 +92,13 @@ const Message = ({
           )}
           {message.files?.length > 0 && (
             <div className={`${message.content && "mt-2"}`}>
-              {message.files?.map((file) => (
+              {message.files?.map((file, index) => (
                 <img
-                  key={file.id}
+                  key={index}
                   data-src={file.url}
                   src={file.url}
                   alt="file"
-                  className="rounded"
+                  className="rounded max-w-[500px]"
                 />
               ))}
             </div>
@@ -102,26 +117,32 @@ const Message = ({
               </div>
 
               {showOptions && (
-                <div className="absolute right-full top-0">
+                <div
+                  ref={optionsContainerRef}
+                  className="absolute right-full top-0"
+                >
                   <div className="mr-2 bg-white p-2">
-                    <button
-                      className="bg-blue-500 text-white text-sm w-16 h-8 border rounded-lg active:bg-blue-600"
+                    <div
+                      className="flex gap-2 items-center cursor-pointer hover:bg-slate-100 p-1 rounded"
                       onClick={() => {
                         idMessageToUpdate.current = message.id;
                         handleOpenUpdateDialog();
                       }}
                     >
-                      update
-                    </button>
-                    <button
-                      className="bg-red-500 text-white text-sm w-16 h-8 border rounded-lg active:bg-red-600"
+                      <p className="text-blue-500 text-sm">Update</p>
+                      <UpdateIcon width={24} height={24} />
+                    </div>
+
+                    <div
+                      className="flex gap-2 items-center cursor-pointer hover:bg-slate-100 p-1 rounded"
                       onClick={() => {
                         idMessageToDelete.current = message.id;
                         handleOpenDeleteDialog();
                       }}
                     >
-                      delete
-                    </button>
+                      <p className="text-red-500 text-sm pr-1">Delete</p>
+                      <DeleteIcon width={24} height={24} />
+                    </div>
                   </div>
                 </div>
               )}
