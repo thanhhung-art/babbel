@@ -2,10 +2,10 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   acceptFriendRequestQuery,
   getFriendRequestQuery,
-  verifyUser,
 } from "../../../lib/react_query/queries";
 import { getFriendRequest, user as user_key } from "../../../utils/contants";
 import Avatar from "../../../components/Avatar";
+import { verifyUser } from "../../../lib/react_query/queries/user/user";
 
 interface IProps {
   id: string;

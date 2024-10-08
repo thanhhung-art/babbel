@@ -3,11 +3,11 @@ import ChatIcon from "../../../assets/icons/ChatIcon";
 import ContactIcon from "../../../assets/icons/ContactIcon";
 import RoomIcon from "../../../assets/icons/RoomIcon";
 import SettingIcon from "../../../assets/icons/SettingIcon";
-import Conversation from "./Conversations";
-import Friends from "./Friends";
+import Conversation from "./conversation/Conversations";
+import Friends from "./Friends/Friends";
 import Room from "./Room";
 import FriendRequestIcon from "../../../assets/icons/FriendRequestIcon";
-import FriendRequest from "./FriendRequest";
+import FriendRequest from "./FriendRequests";
 
 const Sidebar = () => {
   const [currentTab, setCurrentTab] = useState("chat");
@@ -50,7 +50,7 @@ const Sidebar = () => {
             }`}
             onClick={() => handleChooseTab("room")}
           >
-            <RoomIcon width={"30px"} height={"30px"} />
+            <RoomIcon width={30} height={30} />
           </li>
           <li
             className={`cursor-pointer hover:bg-slate-400 p-3 rounded mt-auto ${

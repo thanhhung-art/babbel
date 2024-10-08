@@ -1,11 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getFriendRequest } from "../../../utils/contants";
+import Avatar from "../../../components/Avatar";
 import {
   acceptFriendRequestQuery,
   deleteFriendRequestQuery,
   getRequestFriendQuery,
-} from "../../../lib/react_query/queries";
-import { getFriendRequest } from "../../../utils/contants";
-import Avatar from "../../../components/Avatar";
+} from "../../../lib/react_query/queries/user/friendRequest";
 
 const FriendRequest = () => {
   const queryClient = useQueryClient();
