@@ -191,7 +191,7 @@ const MessageInput = () => {
   }, []);
 
   return (
-    <div className="absolute bottom-0 left-0 right-0 border">
+    <div className="border">
       <div className="flex relative">
         {friendTyping.isTyping &&
           friendTyping.conversationId === currConversationId && (
