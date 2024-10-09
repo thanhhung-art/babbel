@@ -10,10 +10,12 @@ const Auth = ({ children }: { children: ReactElement }) => {
   const { data, isFetched } = useQuery({
     queryKey: ["user"],
     queryFn: verifyUser,
-    staleTime: 4 * 60 * 1000 + 30 * 1000, // 4 minutes
+    staleTime: 4 * 60 * 1000 + 30 * 1000, // 4 minutes 30 seconds
     refetchInterval: 4 * 60 * 1000 + 30 * 1000, // 4 minutes 30 seconds
     refetchIntervalInBackground: true,
     refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchOnMount: false,
   });
 
   useEffect(() => {
