@@ -13,6 +13,7 @@ const Auth = ({ children }: { children: ReactElement }) => {
     staleTime: 4 * 60 * 1000 + 30 * 1000, // 4 minutes
     refetchInterval: 4 * 60 * 1000 + 30 * 1000, // 4 minutes 30 seconds
     refetchIntervalInBackground: true,
+    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {
