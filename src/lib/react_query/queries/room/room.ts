@@ -19,7 +19,7 @@ export async function createRoomQuery(data: { name: string; avatar: string }) {
 }
 
 export async function getRoomsJoinedQuery(): Promise<IRoomJoinedQuery[]> {
-  const res = await fetch(`${apiUrl}/room/joined`, {
+  const res = await fetch(`${apiUrl}/user/room-joined`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -225,6 +225,22 @@ export async function unbanUserQuery(data: { userId: string; roomId: string }) {
     },
     credentials: "include",
     body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    throw new Error(res.statusText);
+  }
+
+  return res.json();
+}
+
+export async function leaveRoomQuery(roomId: string) {
+  const res = await fetch(`${apiUrl}/user/leave-room/${roomId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
   });
 
   if (!res.ok) {
