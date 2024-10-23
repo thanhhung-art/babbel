@@ -58,7 +58,7 @@ const Sidebar = () => {
             }`}
             onClick={() => handleChooseTab("setting")}
           >
-            <SettingIcon width={"37px"} height={"37px"} />
+            <SettingIcon width={"37px"} height={"37px"} fill="#ffffff" />
           </li>
         </ul>
       </div>
