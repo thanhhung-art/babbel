@@ -24,7 +24,7 @@ interface IRef {
   container: HTMLDivElement | null;
 }
 
-const RoomManagement = forwardRef<IRef, IProps>((props, ref) => {
+const RoomManagement = forwardRef<IRef, IProps>((_props, ref) => {
   const [currOption, setCurrOption] = useState("members");
   const dialogRef = createRef<HTMLDialogElement>();
   const containerRef = createRef<HTMLDivElement>();
