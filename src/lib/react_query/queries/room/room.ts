@@ -249,3 +249,51 @@ export async function leaveRoomQuery(roomId: string) {
 
   return res.json();
 }
+
+export async function getTotalMembersAmountQuery(roomId: string) {
+  const res = await fetch(`${apiUrl}/room/total-member/${roomId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    throw new Error(res.statusText);
+  }
+
+  return res.json();
+}
+
+export async function getTotalJoinRequestAmountQuery(roomId: string) {
+  const res = await fetch(`${apiUrl}/room/total-join-request/${roomId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    throw new Error(res.statusText);
+  }
+
+  return res.json();
+}
+
+export async function getTotalBannedUsersAmountQuery(roomId: string) {
+  const res = await fetch(`${apiUrl}/room/total-banned/${roomId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    throw new Error(res.statusText);
+  }
+
+  return res.json();
+}

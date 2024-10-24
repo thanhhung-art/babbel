@@ -12,3 +12,6 @@ export const members = "members";
 export const joinRequest = "join-request";
 export const banned = "banned";
 export const checkAdmin = "check-admin";
+export const totalMembers = "total-member";
+export const totalJoinRequest = "total-join-request";
+export const totalBanned = "total-banned";
