@@ -297,3 +297,42 @@ export async function getTotalBannedUsersAmountQuery(roomId: string) {
 
   return res.json();
 }
+
+export async function getRoomInfoQuery(roomId: string) {
+  const res = await fetch(`${apiUrl}/room/info/${roomId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    throw new Error(res.statusText);
+  }
+
+  return res.json();
+}
+
+export async function updateRoomQuery(data: {
+  id: string;
+  name?: string;
+  description?: string;
+  avatar?: string;
+  isPublic?: boolean;
+}) {
+  const res = await fetch(`${apiUrl}/room/update`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    throw new Error(res.statusText);
+  }
+
+  return res.json();
+}
