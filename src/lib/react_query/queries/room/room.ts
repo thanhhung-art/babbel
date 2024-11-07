@@ -1,5 +1,9 @@
 import { apiUrl } from "../ApiUrl";
-import { IRoomJoinedQuery, IRoomMemberQuery } from "../../../../types/room";
+import {
+  IRoomJoinedQuery,
+  IRoomMemberQuery,
+  IUpdateRoom,
+} from "../../../../types/room";
 
 export async function createRoomQuery(data: { name: string; avatar: string }) {
   const res = await fetch(`${apiUrl}/room`, {
@@ -298,7 +302,12 @@ export async function getTotalBannedUsersAmountQuery(roomId: string) {
   return res.json();
 }
 
-export async function getRoomInfoQuery(roomId: string) {
+export async function getRoomInfoQuery(roomId: string): Promise<{
+  name: string;
+  avatar: string;
+  isPublic: boolean;
+  description: string;
+}> {
   const res = await fetch(`${apiUrl}/room/info/${roomId}`, {
     method: "GET",
     headers: {
@@ -314,15 +323,9 @@ export async function getRoomInfoQuery(roomId: string) {
   return res.json();
 }
 
-export async function updateRoomQuery(data: {
-  id: string;
-  name?: string;
-  description?: string;
-  avatar?: string;
-  isPublic?: boolean;
-}) {
-  const res = await fetch(`${apiUrl}/room/update`, {
-    method: "POST",
+export async function updateRoomQuery(id: string, data: IUpdateRoom) {
+  const res = await fetch(`${apiUrl}/room/update/${id}`, {
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },

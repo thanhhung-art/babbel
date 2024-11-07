@@ -50,3 +50,29 @@ export async function checkRoomAdminQuery(
 
   return await res.json();
 }
+
+export async function getConversationInfoQuery(id: string): Promise<{
+  id: string;
+  createdAt: string;
+  updateAt: string;
+  participants: {
+    id: string;
+    email: string;
+    avatar: string;
+    name: string;
+  }[];
+}> {
+  const res = await fetch(apiUrl + "/user/conversation/" + id, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to get conversation info");
+  }
+
+  return res.json();
+}
