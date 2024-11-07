@@ -1,17 +1,25 @@
 import { createRef, useEffect, useMemo, useState } from "react";
-import { IChatting } from "../../../../types/conversation";
 import useAppStore from "../../../../lib/zustand/store";
 import Avatar from "../../../../components/Avatar";
 import { socket } from "../../../../SocketContext/socket";
 import DotMenuIcon from "../../../../assets/icons/DotMenuIcon";
 import DeleteIcon from "../../../../assets/icons/DeleteIcon";
+import { useQuery } from "@tanstack/react-query";
+import { getConversationInfoQuery } from "../../../../lib/react_query/queries/user/user";
+import { getRoomInfoQuery } from "../../../../lib/react_query/queries/room/room";
+import { getConversationInfo, getRoomInfo } from "../../../../utils/contants";
 
 interface IProps {
-  conversation: IChatting;
   handleRemoveChatting: (id: string) => void;
+  conversationId: string | null;
+  roomId: string | null;
 }
 
-const Conversation = ({ conversation, handleRemoveChatting }: IProps) => {
+const Conversation = ({
+  handleRemoveChatting,
+  conversationId,
+  roomId,
+}: IProps) => {
   const [isButtonVisible, setIsOptionsVisible] = useState(false);
   const optionsContainer = createRef<HTMLDivElement>();
 
@@ -24,41 +32,61 @@ const Conversation = ({ conversation, handleRemoveChatting }: IProps) => {
     (state) => state.setCurrentConversationId
   );
 
+  const conversationData = useQuery({
+    queryKey: [getConversationInfo, conversationId],
+    queryFn: () => getConversationInfoQuery(conversationId || ""),
+    enabled: !!conversationId,
+  });
+
+  const roomData = useQuery({
+    queryKey: [getRoomInfo, roomId],
+    queryFn: () => getRoomInfoQuery(roomId || ""),
+    enabled: !!roomId,
+  });
+
   const conversationName = useMemo(() => {
-    return (
-      conversation.conversation?.participants[0].name ||
-      conversation.room?.name ||
-      "No name"
-    );
-  }, [conversation]);
+    if (conversationData.data) {
+      return conversationData.data.participants[0].name;
+    }
+
+    if (roomData.data) {
+      return roomData.data.name;
+    }
+  }, [conversationData.data, roomData.data]);
 
   const isCurrentConversation = useMemo(() => {
-    if (conversation.conversation) {
-      return currentFriendId === conversation.conversation.participants[0].id;
+    if (conversationData.data) {
+      return currentFriendId === conversationData.data.participants[0].id;
     }
 
-    if (conversation.room) {
-      return currentRoomId === conversation.room.id;
+    if (roomData.data) {
+      return currentRoomId === roomId;
     }
-  }, [conversation, currentFriendId, currentRoomId]);
+  }, [
+    currentFriendId,
+    currentRoomId,
+    conversationData.data,
+    roomData.data,
+    roomId,
+  ]);
 
   const isUserOnline = useMemo(() => {
-    if (!conversation.conversation) return false;
-    return onlineFriends.includes(conversation.conversation.participants[0].id);
-  }, [onlineFriends, conversation]);
+    if (!conversationData.data) return false;
+    return onlineFriends.includes(conversationData.data.participants[0].id);
+  }, [conversationData.data, onlineFriends]);
 
   const handleSetCurrentConversation = () => {
-    if (conversation.conversation) {
-      setCurrentFriendId(conversation.conversation.participants[0].id);
-      setCurrentConversationId(conversation.conversation.id);
+    if (conversationId && conversationData.data) {
+      setCurrentFriendId(conversationData.data.participants[0].id);
+      setCurrentConversationId(conversationId);
       setCurrentRoomId("");
     }
 
-    if (conversation.room) {
-      setCurrentRoomId(conversation.room.id);
+    if (roomId && roomData.data) {
+      setCurrentRoomId(roomId);
       setCurrentFriendId("");
       setCurrentConversationId("");
-      socket.emit("join-room", conversation.room.id);
+      socket.emit("join-room", roomId);
     }
   };
 
@@ -103,16 +131,18 @@ const Conversation = ({ conversation, handleRemoveChatting }: IProps) => {
           </div>
           <h3>{conversationName}</h3>
         </div>
-        <div className="relative" onClick={handleDotMenuClick} ref={optionsContainer}>
+        <div
+          className="relative"
+          onClick={handleDotMenuClick}
+          ref={optionsContainer}
+        >
           <DotMenuIcon />
           {isButtonVisible && (
-            <div
-              className="absolute right-full top-0 rounded shadow bg-white"
-            >
+            <div className="absolute right-full top-0 rounded shadow bg-white">
               <div className="flex flex-col p-2">
                 <div
                   className="flex items-center hover:bg-slate-100"
-                  onClick={() => handleRemoveChatting(conversation.id)}
+                  onClick={() => handleRemoveChatting(conversationId || "")}
                 >
                   <span className="px-4 py-2 text-red-500 text-[14px]">
                     remove

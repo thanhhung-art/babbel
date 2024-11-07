@@ -35,8 +35,9 @@ const Conversations = () => {
         data.map((conversation) => (
           <Conversation
             key={conversation.id}
-            conversation={conversation}
             handleRemoveChatting={handleRemoveChatting}
+            conversationId={conversation.conversationId}
+            roomId={conversation.roomId}
           />
         ))}
     </>
