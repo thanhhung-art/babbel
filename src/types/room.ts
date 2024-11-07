@@ -43,3 +43,28 @@ export interface RoomAdmin {
   createdAt: Date;
   udpateAt: Date;
 }
+
+export interface IRoomMemberQuery {
+  id: string;
+  userId: string;
+  user: {
+    avatar: string;
+    name: string;
+  };
+}
+
+export interface IRoomJoinedQuery {
+  id: string;
+  name: string;
+  avatar: string;
+  createdAt: string;
+  updateAt: string;
+}
+
+export interface IUpdateRoom {
+  name?: string;
+  avatar?: string;
+  description?: string;
+  isPublic?: boolean;
+  [key: string]: string | boolean | undefined;
+}
