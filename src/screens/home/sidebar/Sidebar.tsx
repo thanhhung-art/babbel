@@ -3,7 +3,7 @@ import ChatIcon from "../../../assets/icons/ChatIcon";
 import ContactIcon from "../../../assets/icons/ContactIcon";
 import RoomIcon from "../../../assets/icons/RoomIcon";
 import SettingIcon from "../../../assets/icons/SettingIcon";
-import Conversation from "./conversation/Conversations";
+import Conversations from "./conversation/Conversations";
 import Friends from "./Friends/Friends";
 import Room from "./Room";
 import FriendRequestIcon from "../../../assets/icons/FriendRequestIcon";
@@ -63,7 +63,7 @@ const Sidebar = () => {
         </ul>
       </div>
       <div className="p-2 w-full">
-        {currentTab === "chat" && <Conversation />}
+        {currentTab === "chat" && <Conversations />}
         {currentTab === "contact" && <Friends />}
         {currentTab === "friend-request" && <FriendRequest />}
         {currentTab === "room" && <Room />}
