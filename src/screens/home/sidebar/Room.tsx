@@ -1,22 +1,38 @@
-import { useQuery } from "@tanstack/react-query";
-import { getRoomsJoinedQuery } from "../../../lib/react_query/queries";
-import { roomsJoined } from "../../../utils/contants";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { chatting, roomsJoined } from "../../../utils/contants";
 import Avatar from "../../../components/Avatar";
 import Search from "../../../components/Search";
 import useAppStore from "../../../lib/zustand/store";
+import { addConversationToChatQuery } from "../../../lib/react_query/queries/utils";
+import { getRoomsJoinedQuery } from "../../../lib/react_query/queries/room/room";
 
 const Room = () => {
+  const queryClient = useQueryClient();
   const setCurrentRoomId = useAppStore((state) => state.setCurrentRoomId);
   const setCurrentFriendId = useAppStore((state) => state.setCurrentFriendId);
+  const setCurrConversationId = useAppStore(
+    (state) => state.setCurrentConversationId
+  );
 
   const { data, isLoading } = useQuery({
     queryKey: [roomsJoined],
     queryFn: getRoomsJoinedQuery,
   });
 
+  const addToChatMutation = useMutation({
+    mutationFn: (roomId: string) => {
+      return addConversationToChatQuery("room", roomId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [chatting] });
+    },
+  });
+
   const handleSetState = (roomId: string) => {
     setCurrentRoomId(roomId);
     setCurrentFriendId("");
+    setCurrConversationId("");
+    addToChatMutation.mutate(roomId);
   };
 
   if (isLoading) {
@@ -24,7 +40,12 @@ const Room = () => {
   }
 
   if (data?.length === 0) {
-    return <h3 className="text-center mt-4 text-slate-700">No rooms</h3>;
+    return (
+      <div className="mt-1">
+        <Search type="room" />
+        <p className="mt-4 text-center">No rooms joined</p>
+      </div>
+    );
   }
 
   return (
