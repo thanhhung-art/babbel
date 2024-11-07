@@ -16,3 +16,4 @@ export const totalMembers = "total-member";
 export const totalJoinRequest = "total-join-request";
 export const totalBanned = "total-banned";
 export const getRoomInfo = "get-room-info";
+export const getConversationInfo = "get-conversation-info";
