@@ -8,6 +8,7 @@ import {
 import useAppStore from "../../lib/zustand/store";
 import { useEffect, useRef } from "react";
 import { IUpdateRoom } from "../../types/room";
+import LoadingIcon from "../../assets/icons/LoadingIcon";
 
 const SettingRoom = () => {
   const currRoooId = useAppStore((state) => state.currentRoomId);
@@ -122,8 +123,18 @@ const SettingRoom = () => {
           <button
             className="bg-blue-500 w-[110px] py-2  text-white rounded-lg text-sm hover:bg-blue-600 active:bg-blue-700"
             onClick={hanldeUpdateRoom}
+            disabled={updateRoomMutation.isPending}
           >
-            {updateRoomMutation.isPending ? "loading" : "update"}
+            {updateRoomMutation.isPending ? (
+              <div className="flex gap-2 items-center px-2">
+                <div className="animate-spin w-fit h-fit">
+                  <LoadingIcon width={20} height={20} />
+                </div>
+                <p className="text-sm">loading...</p>
+              </div>
+            ) : (
+              "update"
+            )}
           </button>
           <button className="bg-red-500 w-[110px] py-2 text-white rounded-lg text-sm hover:bg-red-600 active:bg-red-700">
             delete
