@@ -153,7 +153,7 @@ const Search = ({ type }: IProps) => {
                           {sendFriendRequestUser.includes(item.id) ? (
                             <SuccessIcon w={16} h={16} />
                           ) : (
-                            <PlusIcon w={16} h={16} />
+                            <PlusIcon width={16} height={16} />
                           )}
                         </div>
                       ) : (
@@ -185,7 +185,9 @@ const Search = ({ type }: IProps) => {
                     {sendJoinRequestRoom.includes(item.id) ? (
                       <SuccessIcon w={16} h={16} />
                     ) : (
-                      <PlusIcon w={16} h={16} />
+                      <div className="bg-blue-500 rounded-full p-1">
+                        <PlusIcon width={16} height={16} />
+                      </div>
                     )}
                   </div>
                 </div>
