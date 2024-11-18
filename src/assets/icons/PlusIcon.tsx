@@ -1,27 +1,18 @@
-interface IProps {
-  w?: number;
-  h?: number;
-}
-
-const PlusIcon = ({ w = 20, h = 20 }: IProps) => {
-  return (
-    <svg
-      width={w}
-      height={h}
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-      className="size-6"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M12 4.5v15m7.5-7.5h-15"
-      />
-    </svg>
-  );
-};
-
+import { SVGProps } from "react";
+const PlusIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    stroke="#fff"
+    viewBox="0 0 24 24"
+    {...props}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M4 12h16m-8-8v16"
+    />
+  </svg>
+);
 export default PlusIcon;
