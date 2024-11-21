@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Avatar from "../Avatar";
 import { getRoomInfo } from "../../utils/contants";
 import {
+  deleteRoomQuery,
   getRoomInfoQuery,
   updateRoomQuery,
 } from "../../lib/react_query/queries/room/room";
@@ -50,6 +51,12 @@ const SettingRoom = () => {
     },
   });
 
+  const deleteRoomMutation = useMutation({
+    mutationFn: () => {
+      return deleteRoomQuery(currRoooId);
+    },
+  });
+
   const handleTolgglePrivate = () => {
     if (roomPrivate.current) {
       roomPrivate.current.checked = !roomPrivate.current?.checked;
@@ -64,6 +71,10 @@ const SettingRoom = () => {
         isPublic: !roomPrivate.current.checked,
       });
     }
+  };
+
+  const handleDeleteRoom = () => {
+    deleteRoomMutation.mutate();
   };
 
   useEffect(() => {
@@ -136,8 +147,21 @@ const SettingRoom = () => {
               "update"
             )}
           </button>
-          <button className="bg-red-500 w-[110px] py-2 text-white rounded-lg text-sm hover:bg-red-600 active:bg-red-700">
-            delete
+          <button
+            className="bg-red-500 w-[110px] py-2 text-white rounded-lg text-sm hover:bg-red-600 active:bg-red-700"
+            onClick={handleDeleteRoom}
+            disabled={deleteRoomMutation.isPending}
+          >
+            {deleteRoomMutation.isPending ? (
+              <div className="flex gap-2 items-center px-2">
+                <div className="animate-spin w-fit h-fit">
+                  <LoadingIcon width={20} height={20} />
+                </div>
+                <p className="text-sm">loading...</p>
+              </div>
+            ) : (
+              "delete"
+            )}
           </button>
         </div>
       </div>
