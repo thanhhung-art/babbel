@@ -7,7 +7,7 @@ import {
   roomsJoined,
 } from "../../../utils/contants";
 import useAppStore from "../../../lib/zustand/store";
-import { createRef, useEffect, useRef } from "react";
+import { createRef, useRef } from "react";
 import RoomManagement from "../../../components/room/RoomManagement";
 import DotMenuIcon from "../../../assets/icons/DotMenuIcon";
 import {
@@ -23,8 +23,7 @@ const RoomBar = () => {
   const triggerRef = createRef<HTMLDivElement>();
   const refs = useRef<{
     dialog: HTMLDialogElement | null;
-    container: HTMLDivElement | null;
-  }>({ dialog: null, container: null });
+  }>({ dialog: null });
 
   const { data } = useQuery({
     queryKey: [room],
@@ -56,25 +55,6 @@ const RoomBar = () => {
     leaveRoomMutation.mutate();
     setCurrentRoomId("");
   };
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        refs.current.dialog &&
-        refs.current.container &&
-        !refs.current.container.contains(e.target as Node) &&
-        !triggerRef.current?.contains(e.target as Node)
-      ) {
-        handleCloseOptions();
-      }
-    };
-
-    document.addEventListener("click", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [triggerRef]);
 
   return (
     <div className="bg-white p-2">

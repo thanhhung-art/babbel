@@ -33,18 +33,15 @@ interface IProps {
 
 interface IRef {
   dialog: HTMLDialogElement | null;
-  container: HTMLDivElement | null;
 }
 
 const RoomManagement = forwardRef<IRef, IProps>((_props, ref) => {
   const [currOption, setCurrOption] = useState("members");
   const dialogRef = createRef<HTMLDialogElement>();
-  const containerRef = createRef<HTMLDivElement>();
   const currentRoomId = useAppStore((state) => state.currentRoomId);
 
   useImperativeHandle(ref, () => ({
     dialog: dialogRef.current,
-    container: containerRef.current,
   }));
 
   const totalMembersQuery = useQuery({
@@ -68,7 +65,7 @@ const RoomManagement = forwardRef<IRef, IProps>((_props, ref) => {
 
   return (
     <dialog ref={dialogRef} className="rounded-lg outline-none">
-      <div className="p-4 rounded-lg" ref={containerRef}>
+      <div className="p-4 rounded-lg dialog-container border">
         <div className="flex">
           <div>
             <ul className="border-r w-[200px] pr-4 h-full">
