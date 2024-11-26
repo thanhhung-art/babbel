@@ -62,7 +62,7 @@ const Sidebar = () => {
           </li>
         </ul>
       </div>
-      <div className="p-2 w-full">
+      <div className="p-2 w-full relative">
         {currentTab === "chat" && <Conversations />}
         {currentTab === "contact" && <Friends />}
         {currentTab === "friend-request" && <FriendRequest />}
