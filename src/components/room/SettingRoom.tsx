@@ -1,18 +1,23 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Avatar from "../Avatar";
-import { getRoomInfo } from "../../utils/contants";
+import { getRoomInfo, roomsJoined } from "../../utils/contants";
 import {
   deleteRoomQuery,
   getRoomInfoQuery,
   updateRoomQuery,
 } from "../../lib/react_query/queries/room/room";
 import useAppStore from "../../lib/zustand/store";
-import { useEffect, useRef } from "react";
+import { RefObject, useEffect, useRef } from "react";
 import { IUpdateRoom } from "../../types/room";
 import LoadingIcon from "../../assets/icons/LoadingIcon";
 
-const SettingRoom = () => {
+interface IProps {
+  dialog: RefObject<HTMLDialogElement>;
+}
+
+const SettingRoom = ({ dialog }: IProps) => {
   const currRoooId = useAppStore((state) => state.currentRoomId);
+  const setCurrentRoomId = useAppStore((state) => state.setCurrentRoomId);
   const roomName = useRef<HTMLInputElement>(null);
   const roomDescription = useRef<HTMLTextAreaElement>(null);
   const roomPrivate = useRef<HTMLInputElement>(null);
@@ -55,6 +60,9 @@ const SettingRoom = () => {
     mutationFn: () => {
       return deleteRoomQuery(currRoooId);
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [roomsJoined] });
+    },
   });
 
   const handleTolgglePrivate = () => {
@@ -75,6 +83,8 @@ const SettingRoom = () => {
 
   const handleDeleteRoom = () => {
     deleteRoomMutation.mutate();
+    dialog.current?.close();
+    setCurrentRoomId("");
   };
 
   useEffect(() => {

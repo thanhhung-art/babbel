@@ -127,7 +127,7 @@ const RoomManagement = forwardRef<IRef, IProps>((_props, ref) => {
               {currOption === "members" && <Members />}
               {currOption === "join-requests" && <JoinRequests />}
               {currOption === "banned-users" && <BannedUsers />}
-              {currOption === "setting" && <Setting />}
+              {currOption === "setting" && <Setting dialog={dialogRef} />}
             </Suspense>
           </div>
         </div>
