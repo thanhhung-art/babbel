@@ -5,7 +5,12 @@ import {
   IUpdateRoom,
 } from "../../../../types/room";
 
-export async function createRoomQuery(data: { name: string; avatar: string }) {
+export async function createRoomQuery(data: {
+  name: string;
+  avatar: string;
+  isPublic: boolean;
+  description: string;
+}) {
   const res = await fetch(`${apiUrl}/room`, {
     method: "POST",
     headers: {
@@ -331,6 +336,22 @@ export async function updateRoomQuery(id: string, data: IUpdateRoom) {
     },
     credentials: "include",
     body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    throw new Error(res.statusText);
+  }
+
+  return res.json();
+}
+
+export async function deleteRoomQuery(id: string) {
+  const res = await fetch(`${apiUrl}/room/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
   });
 
   if (!res.ok) {
