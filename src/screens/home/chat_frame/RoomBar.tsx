@@ -26,7 +26,7 @@ const RoomBar = () => {
   }>({ dialog: null });
 
   const { data } = useQuery({
-    queryKey: [room],
+    queryKey: [room, currRoomId],
     queryFn: () => finRoomById(currRoomId),
     enabled: !!currRoomId,
   });
