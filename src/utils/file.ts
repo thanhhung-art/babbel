@@ -74,3 +74,68 @@ export const handleFileUploads = async (files: IFileUpload) => {
 
   return Promise.all(fileUploadsPromises);
 };
+
+// send image profile to server
+
+export const sendProfileImageChunk = async (
+  chunk: Blob,
+  fileName: string,
+  chunkIndex: number,
+  totalChunks: number,
+  type: string,
+  size: number
+): Promise<{ url: string; status: string }> => {
+  try {
+    const data = new FormData();
+    data.append("file", chunk);
+    data.append("fileName", fileName);
+    data.append("chunkIndex", chunkIndex.toString());
+    data.append("totalChunks", totalChunks.toString());
+    data.append("type", type);
+    data.append("size", size.toString());
+
+    const response = await fetch(apiUrl + "/file/upload-profile-image", {
+      method: "POST",
+      headers: {
+        "X-File-Name": fileName,
+        "X-Chunk-Index": chunkIndex.toString(),
+        "X-Total-Chunks": totalChunks.toString(),
+        "x-file-type": type,
+        "x-file-size": size.toString(),
+      },
+      credentials: "include",
+      body: data,
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to upload chunk");
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error(`Error uploading chunk ${chunkIndex} of ${fileName}:`, error);
+    throw error;
+  }
+};
+
+export const handleProfileImageUploads = async (file: IFileUpload) => {
+  const fileUploadsPromises = Object.keys(file).map((key) => {
+    const fileData = file[key];
+
+    return Promise.all(
+      fileData.chunks.map((chunk, index) =>
+        sendProfileImageChunk(
+          chunk,
+          fileData.name,
+          index,
+          fileData.totalChunks,
+          fileData.type,
+          fileData.size
+        )
+      )
+    );
+  });
+
+  return Promise.all(fileUploadsPromises);
+};
