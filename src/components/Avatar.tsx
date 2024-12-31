@@ -22,10 +22,14 @@ const Avatar = ({ avatar, width, height, name }: IProps) => {
 
   return (
     <div
-      className={`min-${width} min-${height} ${width} ${height} rounded-full ${generateRandomColor()} text-white flex items-center justify-center`}
+      className={`min-${width} min-${height} ${width} ${height} rounded-full ${generateRandomColor()} text-white flex items-center justify-center relative`}
     >
       {avatar ? (
-        <img src={avatar} alt="avatar" className="rounded-full" />
+        <img
+          src={avatar}
+          alt="avatar"
+          className="rounded-full object-cover absolute top-0 left-0 right-0 bottom-0 w-full h-full"
+        />
       ) : (
         <h4 className="text-xl">{name?.charAt(0).toUpperCase()}</h4>
       )}
