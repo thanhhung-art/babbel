@@ -38,7 +38,7 @@
   border-radius: 50%;
 }
 
-#switch:checked + .slider:before {
+.switch:checked + .slider:before {
   -webkit-transform: translateX(16px);
   -ms-transform: translateX(16px);
   transform: translateX(16px);
