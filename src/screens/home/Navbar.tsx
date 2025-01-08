@@ -19,7 +19,12 @@ const Navbar = () => {
           <BellIcon w={40} h={40} />
         </li>
         <li onClick={toggleSidebarRight} className="min-w-12 cursor-pointer">
-          <Avatar height="h-12" width="w-12" name={data?.name} />
+          <Avatar
+            height="h-12"
+            width="w-12"
+            name={data?.name}
+            avatar={data?.avatar}
+          />
         </li>
       </ul>
     </nav>
