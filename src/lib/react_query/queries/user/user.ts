@@ -76,3 +76,42 @@ export async function getConversationInfoQuery(id: string): Promise<{
 
   return res.json();
 }
+
+export async function updateProfileQuery(data: {
+  email?: string;
+  name?: string;
+  avatar?: string;
+}): Promise<User> {
+  const res = await fetch(apiUrl + "/user/update-profile", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to update profile");
+  }
+
+  return res.json();
+}
+
+export async function resetPassword(oldPassword: string, newPassword: string) {
+  const res = await fetch(apiUrl + "/user/reset-password", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({ oldPassword, newPassword }),
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw { status: res.status, message: errorData.message };
+  }
+
+  return res.json();
+}
