@@ -134,7 +134,7 @@ const SettingRoom = ({ dialog }: IProps) => {
               title="switch"
               id="switch"
               type="checkbox"
-              className="w-0 h-0 peer"
+              className="w-0 h-0 peer switch"
             />
             <span className="absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-gray-200 transition-all peer-checked:bg-blue-500 peer-focus:shadow slider rounded-[30px]"></span>
           </label>
