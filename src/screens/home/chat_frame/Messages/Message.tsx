@@ -83,7 +83,7 @@ const Message = ({
         <div className="relative">
           {message.content && (
             <p
-              className={`p-4 ${
+              className={`p-3 md:p-4 ${
                 isUser ? "bg-blue-500 text-white" : "bg-white"
               } rounded-full`}
             >
@@ -98,7 +98,7 @@ const Message = ({
                   data-src={file.url}
                   src={file.url}
                   alt="file"
-                  className="rounded max-w-[500px]"
+                  className="rounded-lg max-w-[300px] md:max-w-[500px] md:rounded"
                 />
               ))}
             </div>

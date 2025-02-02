@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { createRef, useEffect } from "react";
 import { socket } from "../../SocketContext/socket";
 import Sidebar from "./sidebar/Sidebar";
 import ChatFrame from "./chat_frame/ChatFrame";
@@ -12,6 +12,12 @@ const Home = () => {
   const setOnlineFriends = useAppStore((state) => state.setOnlineFriends);
   const onlineFriends = useAppStore((state) => state.onlineFriends);
   const { data } = useQuery({ queryKey: [user], queryFn: verifyUser });
+  const sideBarContainer = createRef<HTMLDivElement>();
+
+  const handleOpenNavbar = () => {
+    console.log(1);
+    sideBarContainer.current?.classList.toggle("-left-[100vw]");
+  };
 
   useEffect(() => {
     if (data?.id) {
@@ -90,10 +96,15 @@ const Home = () => {
 
   return (
     <div className="flex flex-col h-screen">
-      <Navbar />
+      <Navbar handleOpenNavbar={handleOpenNavbar} />
       <div className="flex flex-grow relative overflow-hidden">
-        <Sidebar />
-        <div className="w-3/4">
+        <article
+          className="absolute left-0 flex w-full h-full z-10 transition-all duration-300 md:static md:w-1/4 md:h-auto"
+          ref={sideBarContainer}
+        >
+          <Sidebar />
+        </article>
+        <div className="w-full md:w-3/4">
           <ChatFrame />
         </div>
       </div>

@@ -5,7 +5,11 @@ import useAppStore from "../../lib/zustand/store";
 import { verifyUser } from "../../lib/react_query/queries/user/user";
 import MenuIcon from "../../assets/icons/MenuIcon";
 
-const Navbar = () => {
+interface IProps {
+  handleOpenNavbar: () => void;
+}
+
+const Navbar = ({ handleOpenNavbar }: IProps) => {
   const toggleSidebarRight = useAppStore((state) => state.toggleSidebarRight);
   const { data } = useQuery({
     queryKey: ["user"],
@@ -15,7 +19,7 @@ const Navbar = () => {
   return (
     <nav className="border p-4 flex justify-between items-center">
       <div className="flex items-center gap-2">
-        <div className="md:hidden">
+        <div className="md:hidden" onClick={handleOpenNavbar}>
           <MenuIcon width={30} height={30} />
         </div>
         <h2>Chat app</h2>

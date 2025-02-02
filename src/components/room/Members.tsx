@@ -8,6 +8,8 @@ import { verifyUser } from "../../lib/react_query/queries/user/user";
 import { members, user } from "../../utils/contants";
 import useAppStore from "../../lib/zustand/store";
 import Avatar from "../Avatar";
+import DeleteIcon from "../../assets/icons/DeleteIcon";
+import BannedIcon from "../../assets/icons/BannedIcon";
 
 const Members = () => {
   const currRoomId = useAppStore((state) => state.currentRoomId);
@@ -56,24 +58,26 @@ const Members = () => {
           {data.map((member) => (
             <li
               key={member.userId}
-              className="flex items-center gap-2 px-4 py-2 hover:bg-slate-50"
+              className="flex items-center gap-2 md:px-4 py-2 hover:bg-slate-50"
             >
               <Avatar width="w-10" height="h-10" name={member.user.name} />
               <h4 className="flex-1">{member.user.name}</h4>
               {userData.data?.id !== member.userId && (
                 <div className="flex gap-2">
-                  <button
-                    className="text-sm bg-blue-500 text-white w-[90px] py-[7px] rounded-full active:bg-blue-700 hover:bg-blue-600"
+                  <div
+                    className="flex justify-center items-center text-sm bg-gray-500 text-white w-[40px] h-[40px] md:w-[90px] md:py-[7px] rounded md:rounded-full  hover:bg-gray-600 active:bg-gray-700 gap-2 cursor-pointer"
                     onClick={() => handleBanUser(member.userId)}
                   >
-                    banned
-                  </button>
-                  <button
-                    className="text-sm bg-red-500 text-white w-[90px] py-[7px] rounded-full  hover:bg-red-600 active:bg-red-700"
+                    <BannedIcon width={18} height={18} />
+                    <h5 className="font-semibold hidden md:block">ban</h5>
+                  </div>
+                  <div
+                    className="flex justify-center items-center text-sm bg-red-500 text-white w-[40px] h-[40px] md:w-[90px] md:py-[7px] rounded md:rounded-full  hover:bg-red-600 active:bg-red-700 cursor-pointer"
                     onClick={() => handleKickUser(member.userId)}
                   >
-                    kick
-                  </button>
+                    <DeleteIcon width={24} height={24} fill="#ffffff" />
+                    <h5 className="font-semibold mt-1 hidden md:block">kick</h5>
+                  </div>
                 </div>
               )}
             </li>

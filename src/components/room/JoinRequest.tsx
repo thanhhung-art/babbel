@@ -7,6 +7,8 @@ import {
   getJoinRequestQuery,
   rejectJoinRequestQuery,
 } from "../../lib/react_query/queries/room/room";
+import SuccessIcon from "../../assets/icons/SuccessIcon";
+import XIcon from "../../assets/icons/XIcon";
 
 const JoinRequest = () => {
   const currRoomId = useAppStore((state) => state.currentRoomId);
@@ -53,22 +55,24 @@ const JoinRequest = () => {
   return (
     <ul className="">
       {data.map((req) => (
-        <li key={req.userId} className="flex gap-2 items-center px-4 py-2">
+        <li key={req.userId} className="flex gap-2 items-center pl-4 py-2">
           <Avatar width="w-10" height="h-10" name={req.user.name} />
           <h4 className="flex-1">{req.user.name}</h4>
-          <div>
-            <button
-              className="px-2 py-1 bg-blue-500 text-white rounded-full text-sm active:bg-blue-600 "
+          <div className="flex gap-2">
+            <div
+              className="flex justify-center items-center gap-1 px-2 md:px-3 py-1 md:py-2 bg-green-500 text-white rounded-lg md:rounded-full text-sm active:bg-green-600 "
               onClick={() => handleAcceptJoinRequest(req.userId)}
             >
-              accept
-            </button>
-            <button
-              className="px-2 py-1 bg-red-500 text-white rounded-full text-sm active:bg-red-600 ml-2"
+              <SuccessIcon width={20} height={20} fill="#ffffff" />
+              <h5 className="hidden md:block font-semibold">accept</h5>
+            </div>
+            <div
+              className="flex justify-center items-center gap-1 px-2 md:px-3 py-1 md:py-2 bg-red-500 text-white rounded-lg md:rounded-full text-sm active:bg-red-600"
               onClick={() => handleRejectJoinRequest(req.userId)}
             >
-              reject
-            </button>
+              <XIcon width={20} height={20} />
+              <h5 className="hidden md:block font-semibold">reject</h5>
+            </div>
           </div>
         </li>
       ))}

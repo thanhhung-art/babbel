@@ -195,26 +195,24 @@ const Messages = () => {
 
   return (
     <>
-      <div className="flex-grow overflow-auto pt-4 px-4">
-        {messages.map((message) => {
-          const isUser = userData.data?.id === message.userId;
+      {messages.map((message) => {
+        const isUser = userData.data?.id === message.userId;
 
-          return (
-            <Message
-              key={message.id}
-              message={message}
-              isUser={isUser}
-              handleOpenDeleteDialog={handleOpenDeleteDialog}
-              handleOpenUpdateDialog={handleOpenUpdateDialog}
-              idMessageToDelete={idMessageToDelete}
-              idMessageToUpdate={idMessageToUpdate}
-              username={message.user?.name}
-              handleScrollIntoView={handleScrollIntoView}
-            />
-          );
-        })}
-        <div ref={anchorRef}></div>
-      </div>
+        return (
+          <Message
+            key={message.id}
+            message={message}
+            isUser={isUser}
+            handleOpenDeleteDialog={handleOpenDeleteDialog}
+            handleOpenUpdateDialog={handleOpenUpdateDialog}
+            idMessageToDelete={idMessageToDelete}
+            idMessageToUpdate={idMessageToUpdate}
+            username={message.user?.name}
+            handleScrollIntoView={handleScrollIntoView}
+          />
+        );
+      })}
+      <div ref={anchorRef}></div>
       <dialog ref={deleteDialogRef} className="p-4 shadow rounded-lg">
         <p>Are you want to delete the message?</p>
         <div className="flex justify-between mt-4">

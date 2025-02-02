@@ -229,7 +229,7 @@ const MessageInput = () => {
           ref={hiddenInputContainerRef}
           className="w-0 transition-all duration-200 overflow-hidden"
         >
-          <div className="flex justify-between p-2 items-center border h-full bg-white">
+          <div className="flex justify-between gap-1 md:gap-0 p-2 items-center border h-full bg-white">
             {/* <label htmlFor="file" className="cursor-pointer">
               <input id="file" type="file" className="hidden" hidden />
               <FileIcon />
@@ -262,7 +262,7 @@ const MessageInput = () => {
             >
               {openEmoji && (
                 <Suspense>
-                  <div className="absolute -top-[460px] -left-16">
+                  <div className="absolute -top-[460px] -left-6 md:-left-16">
                     <Picker data={emojiData} onEmojiSelect={addEmoji} />
                   </div>
                 </Suspense>

@@ -17,7 +17,9 @@ const ChatFrame = () => {
         <Suspense>
           {currRoomId && <RoomBar />}
           {currConversationId && <ConversationBar />}
-          <Messages />  
+          <div className="flex-grow overflow-auto pt-4 px-4">
+            <Messages />
+          </div>
           <MessageInput />
         </Suspense>
       ) : (
