@@ -3,6 +3,7 @@ import BellIcon from "../../assets/icons/BellIcon";
 import Avatar from "../../components/Avatar";
 import useAppStore from "../../lib/zustand/store";
 import { verifyUser } from "../../lib/react_query/queries/user/user";
+import MenuIcon from "../../assets/icons/MenuIcon";
 
 const Navbar = () => {
   const toggleSidebarRight = useAppStore((state) => state.toggleSidebarRight);
@@ -13,7 +14,12 @@ const Navbar = () => {
 
   return (
     <nav className="border p-4 flex justify-between items-center">
-      <h2>Chat app</h2>
+      <div className="flex items-center gap-2">
+        <div className="md:hidden">
+          <MenuIcon width={30} height={30} />
+        </div>
+        <h2>Chat app</h2>
+      </div>
       <ul className="flex gap-8 items-center">
         <li>
           <BellIcon w={40} h={40} />
