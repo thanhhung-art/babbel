@@ -97,7 +97,7 @@ const ConversationBar = () => {
         <h3 className="flex-1">{name}</h3>
 
         <div
-          className="relative z-40"
+          className="relative z-20"
           ref={optionsContainer}
           onClick={handleToggleOptions}
         >

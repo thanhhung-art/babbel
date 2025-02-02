@@ -98,7 +98,7 @@ const Home = () => {
       <Navbar handleOpenNavbar={handleOpenNavbar} />
       <div className="flex flex-grow relative overflow-hidden">
         <article
-          className="absolute left-0 flex w-full h-full z-10 transition-all duration-300 md:static md:w-1/4 md:h-auto"
+          className="absolute left-0 flex w-full h-full z-30 transition-all duration-300 md:static md:w-1/4 md:h-auto"
           ref={sideBarContainer}
         >
           <Sidebar />

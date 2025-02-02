@@ -65,7 +65,7 @@ const RoomBar = () => {
         checkAdminQuery.data &&
         checkAdminQuery.data.isAdmin ? (
           <div
-            className="cursor-pointer"
+            className="cursor-pointer z-20"
             onClick={handleOpenOptions}
             ref={triggerRef}
           >
