@@ -15,7 +15,6 @@ const Home = () => {
   const sideBarContainer = createRef<HTMLDivElement>();
 
   const handleOpenNavbar = () => {
-    console.log(1);
     sideBarContainer.current?.classList.toggle("-left-[100vw]");
   };
 
