@@ -5,12 +5,8 @@ import useAppStore from "../../lib/zustand/store";
 import { verifyUser } from "../../lib/react_query/queries/user/user";
 import MenuIcon from "../../assets/icons/MenuIcon";
 
-interface IProps {
-  handleOpenNavbar: () => void;
-}
-
-const Navbar = ({ handleOpenNavbar }: IProps) => {
-  const toggleSidebarRight = useAppStore((state) => state.toggleSidebarRight);
+const Navbar = () => {
+  const toggleOpenSidebar = useAppStore((state) => state.toggleOpenSidebar);
   const { data } = useQuery({
     queryKey: ["user"],
     queryFn: verifyUser,
@@ -19,7 +15,7 @@ const Navbar = ({ handleOpenNavbar }: IProps) => {
   return (
     <nav className="border p-4 flex justify-between items-center">
       <div className="flex items-center gap-2">
-        <div className="md:hidden" onClick={handleOpenNavbar}>
+        <div className="md:hidden" onClick={toggleOpenSidebar}>
           <MenuIcon width={30} height={30} />
         </div>
         <h2>Chat app</h2>
@@ -28,7 +24,7 @@ const Navbar = ({ handleOpenNavbar }: IProps) => {
         <li>
           <BellIcon w={40} h={40} />
         </li>
-        <li onClick={toggleSidebarRight} className="min-w-12 cursor-pointer">
+        <li className="min-w-12 cursor-pointer">
           <Avatar
             height="h-12"
             width="w-12"

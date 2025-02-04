@@ -22,7 +22,7 @@ const Conversation = ({
 }: IProps) => {
   const [isButtonVisible, setIsOptionsVisible] = useState(false);
   const optionsContainer = createRef<HTMLDivElement>();
-
+  const toggleOpenSideBar = useAppStore((state) => state.toggleOpenSidebar);
   const currentFriendId = useAppStore((state) => state.currentFriendId);
   const currentRoomId = useAppStore((state) => state.currentRoomId);
   const onlineFriends = useAppStore((state) => state.onlineFriends);
@@ -88,6 +88,8 @@ const Conversation = ({
       setCurrentConversationId("");
       socket.emit("join-room", roomId);
     }
+
+    toggleOpenSideBar();
   };
 
   const handleDotMenuClick = (event: React.MouseEvent) => {
