@@ -17,10 +17,10 @@ const AppSettings = forwardRef<HTMLDialogElement, IProps>((_props, ref) => {
   };
 
   return (
-    <dialog ref={ref} className="outline-none rounded-lg">
-      <div className="dialog-container pt-4">
+    <dialog ref={ref} className="outline-none rounded-lg h-full md:h-auto">
+      <div className="dialog-container pt-4 h-full">
         <h2 className="text-center mb-6 text-2xl font-semibold">Settings</h2>
-        <div className="flex">
+        <div className="flex h-full">
           <div className="border-r px-2">
             <h4
               className={`py-2 px-4 cursor-pointer rounded hover:bg-slate-200 hover:text-black ${
