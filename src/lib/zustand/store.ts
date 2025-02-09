@@ -49,6 +49,7 @@ const useAppStore = create<MyStoreState & MyStoreActions>((set, get) => ({
   toggleOpenSidebar: () => {
     const { sideBarContainer } = get();
     sideBarContainer.current?.classList.toggle("-left-[100vw]");
+    sideBarContainer.current?.classList.toggle("left-0");
   },
 }));
 
