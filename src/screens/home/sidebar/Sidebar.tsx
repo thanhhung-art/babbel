@@ -22,6 +22,10 @@ const Sidebar = () => {
     dialogRef.current?.showModal();
   };
 
+  const handleCloseAppSetting = () => {
+    dialogRef.current?.close();
+  }
+
   return (
     <>
       <div className="flex h-full flex-col md:flex-row">
@@ -75,7 +79,7 @@ const Sidebar = () => {
           {currentTab === "friend-request" && <FriendRequest />}
           {currentTab === "room" && <Room />}
         </div>
-        <AppSettings ref={dialogRef} />
+        <AppSettings ref={dialogRef} handleCloseAppSetting={handleCloseAppSetting} />
       </div>
     </>
   );

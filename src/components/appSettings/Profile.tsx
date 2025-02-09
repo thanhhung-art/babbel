@@ -101,61 +101,64 @@ const Profile = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="h-full flex flex-col">
-      <div className="flex justify-center">
-        <label htmlFor="choose-file" className="cursor-pointer">
-          <Avatar
-            width="w-[100px]"
-            height="h-[100px]"
-            name={name}
-            avatar={imagePreview || data?.avatar || ""}
-          />
-          <input
-            id="choose-file"
-            type="file"
-            accept="image/*"
-            className="hidden"
-            title="Choose profile picture"
-            onChange={handleSelectFile}
-          />
-        </label>
-      </div>
-
-      <div className="mt-8 flex-1">
-        <div className="mb-4">
-          <label htmlFor="user-email" className="font-semibold">
-            Email:
+    <div className="h-full">
+      <h2 className="text-xl font-semibold text-center my-4">Profile</h2>
+      <form onSubmit={handleSubmit} className="md:h-full flex flex-col">
+        <div className="flex justify-center">
+          <label htmlFor="choose-file" className="cursor-pointer">
+            <Avatar
+              width="w-[100px]"
+              height="h-[100px]"
+              name={name}
+              avatar={imagePreview || data?.avatar || ""}
+            />
+            <input
+              id="choose-file"
+              type="file"
+              accept="image/*"
+              className="hidden"
+              title="Choose profile picture"
+              onChange={handleSelectFile}
+            />
           </label>
-          <input
-            id="user-email"
-            type="email"
-            placeholder="Email"
-            className="w-full p-2 border rounded outline-none"
-            defaultValue={email}
-            ref={emailRef}
-          />
         </div>
-        <div className="mb-4">
-          <label htmlFor="user-name" className="font-semibold">
-            Name:
-          </label>
-          <input
-            id="user-name"
-            type="text"
-            placeholder="Name"
-            className="w-full p-2 border rounded outline-none"
-            defaultValue={name}
-            ref={nameRef}
-          />
-        </div>
-      </div>
 
-      <div className="pb-4">
-        <button className="w-full bg-blue-500 text-white p-2 rounded mt-4 hover:bg-blue-600 active:bg-blue-700">
-          update
-        </button>
-      </div>
-    </form>
+        <div className="mt-8 flex-1">
+          <div className="mb-4">
+            <label htmlFor="user-email" className="font-semibold">
+              Email:
+            </label>
+            <input
+              id="user-email"
+              type="email"
+              placeholder="Email"
+              className="w-full p-2 border rounded outline-none"
+              defaultValue={email}
+              ref={emailRef}
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="user-name" className="font-semibold">
+              Name:
+            </label>
+            <input
+              id="user-name"
+              type="text"
+              placeholder="Name"
+              className="w-full p-2 border rounded outline-none"
+              defaultValue={name}
+              ref={nameRef}
+            />
+          </div>
+        </div>
+
+        <div className="pb-4">
+          <button className="w-full bg-blue-500 text-white p-2 rounded mt-4 hover:bg-blue-600 active:bg-blue-700">
+            update
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 

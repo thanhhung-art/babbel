@@ -18,6 +18,7 @@ const Settings = () => {
 
   return (
     <div className="mt-2">
+      <h2 className="text-xl font-semibold text-center my-4">Setting</h2>
       <div>
         <div className="mt-2 flex justify-between items-center">
           <h4 className="mb-1">Dark Mode</h4>

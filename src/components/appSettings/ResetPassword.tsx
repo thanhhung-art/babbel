@@ -66,10 +66,10 @@ const ResetPassword = () => {
 
   return (
     <div>
-      <h2 className="mb-4 text-center font-semibold">Reset Password</h2>
+      <h2 className="my-4 text-center text-xl font-semibold">Reset Password</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="current-password" className="text-sm font-semibold">
+          <label htmlFor="current-password" className="font-semibold">
             Current Password:
           </label>
           <div>
@@ -89,7 +89,7 @@ const ResetPassword = () => {
         </div>
 
         <div className="mt-4">
-          <label htmlFor="new-password" className="text-sm font-semibold">
+          <label htmlFor="new-password" className="font-semibold">
             New Password:
           </label>
           <div>
@@ -104,7 +104,7 @@ const ResetPassword = () => {
         </div>
 
         <div className="mt-4">
-          <label htmlFor="confirm-password" className="text-sm font-semibold">
+          <label htmlFor="confirm-password" className="font-semibold">
             Confirm Password:
           </label>
           <div>

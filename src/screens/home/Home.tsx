@@ -93,7 +93,7 @@ const Home = () => {
       <Navbar />
       <div className="flex flex-grow relative overflow-hidden">
         <article
-          className="absolute overflow-hidden left-0 w-full h-full z-30 transition-all duration-300 md:static md:w-1/4 md:h-auto"
+          className="absolute overflow-hidden -left-[100vw] w-full h-full z-30 transition-all duration-300 md:static md:w-1/4 md:h-auto"
           ref={useAppStore((state) => state.sideBarContainer)}
         >
           <Sidebar />
