@@ -12,6 +12,8 @@ type MyStoreState = {
   currentRoomId: string;
   currentConversationId: string;
   sideBarContainer: React.RefObject<HTMLDivElement>;
+  dropdownMenu: React.RefObject<HTMLDivElement>;
+  appSettingDialog: React.RefObject<HTMLDialogElement>;
 };
 
 type MyStoreActions = {
@@ -26,6 +28,9 @@ type MyStoreActions = {
   setCurrentRoomId: (roomId: string) => void;
   setCurrentConversationId: (conversationId: string) => void;
   toggleOpenSidebar: () => void;
+  toggleDropdownMenu: () => void;
+  openAppSetting: () => void;
+  closeAppSetting: () => void;
 };
 
 const useAppStore = create<MyStoreState & MyStoreActions>((set, get) => ({
@@ -37,6 +42,8 @@ const useAppStore = create<MyStoreState & MyStoreActions>((set, get) => ({
   currentRoomId: "",
   currentConversationId: "",
   sideBarContainer: createRef<HTMLDivElement>(),
+  dropdownMenu: createRef<HTMLDivElement>(),
+  appSettingDialog: createRef<HTMLDialogElement>(),
   toggleSidebarRight: () =>
     set((state) => ({ isOpenSidebarRight: !state.isOpenSidebarRight })),
   setOnlineFriends: (onlineFriends) => set({ onlineFriends }),
@@ -50,6 +57,18 @@ const useAppStore = create<MyStoreState & MyStoreActions>((set, get) => ({
     const { sideBarContainer } = get();
     sideBarContainer.current?.classList.toggle("-left-[100vw]");
     sideBarContainer.current?.classList.toggle("left-0");
+  },
+  toggleDropdownMenu: () => {
+    const { dropdownMenu } = get();
+    dropdownMenu.current?.classList.toggle("hidden");
+  },
+  openAppSetting: () => {
+    const { appSettingDialog } = get();
+    appSettingDialog.current?.showModal();
+  },
+  closeAppSetting: () => {
+    const { appSettingDialog } = get();
+    appSettingDialog.current?.close();
   },
 }));
 
