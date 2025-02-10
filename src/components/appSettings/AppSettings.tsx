@@ -1,4 +1,4 @@
-import { forwardRef, useState } from "react";
+import { useState } from "react";
 import Profile from "./Profile";
 import Settings from "./Settings";
 import ResetPassword from "./ResetPassword";
@@ -6,15 +6,14 @@ import ResetPasswordIcon from "../../assets/icons/ResetPassword";
 import ProfileIcon from "../../assets/icons/ProfileIcon";
 import SettingIcon from "../../assets/icons/SettingIcon";
 import XIcon from "../../assets/icons/XIcon";
+import useAppStore from "../../lib/zustand/store";
 
-interface IProps {
-  handleCloseAppSetting: () => void;
-}
-
-const AppSettings = forwardRef<HTMLDialogElement, IProps>((props, ref) => {
+const AppSettings = () => {
   const [selectedSetting, setSelectedSetting] = useState<
     "appSetting" | "profile" | "resetPassword"
   >("appSetting");
+
+  const handleCloseAppSetting = useAppStore((state) => state.closeAppSetting);
 
   const handleSelectSetting = (
     setting: "appSetting" | "profile" | "resetPassword"
@@ -24,12 +23,12 @@ const AppSettings = forwardRef<HTMLDialogElement, IProps>((props, ref) => {
 
   return (
     <dialog
-      ref={ref}
+      ref={useAppStore((state) => state.appSettingDialog)}
       className="outline-none rounded-lg h-full w-full md:h-auto md:w-fit relative"
     >
       <span
         className="absolute top-0 right-0 cursor-pointer bg-red-500 rounded-full p-1 active:bg-red-600 md:hidden"
-        onClick={props.handleCloseAppSetting}
+        onClick={handleCloseAppSetting}
       >
         <XIcon width={10} height={10} />
       </span>
@@ -119,6 +118,6 @@ const AppSettings = forwardRef<HTMLDialogElement, IProps>((props, ref) => {
       </div>
     </dialog>
   );
-});
+};
 
 export default AppSettings;

@@ -1,8 +1,7 @@
-import { createRef, useState } from "react";
+import { useState } from "react";
 import ChatIcon from "../../../assets/icons/ChatIcon";
 import ContactIcon from "../../../assets/icons/ContactIcon";
 import RoomIcon from "../../../assets/icons/RoomIcon";
-import SettingIcon from "../../../assets/icons/SettingIcon";
 import Conversations from "./conversation/Conversations";
 import Friends from "./Friends/Friends";
 import Room from "./Room";
@@ -12,19 +11,10 @@ import AppSettings from "../../../components/appSettings/AppSettings";
 
 const Sidebar = () => {
   const [currentTab, setCurrentTab] = useState("chat");
-  const dialogRef = createRef<HTMLDialogElement>();
 
   const handleChooseTab = (tab: string) => {
     setCurrentTab(tab);
   };
-
-  const handleOpenAppSetting = () => {
-    dialogRef.current?.showModal();
-  };
-
-  const handleCloseAppSetting = () => {
-    dialogRef.current?.close();
-  }
 
   return (
     <>
@@ -63,14 +53,6 @@ const Sidebar = () => {
             >
               <RoomIcon width={30} height={30} />
             </li>
-            <li
-              className={`cursor-pointer hover:bg-slate-400 p-3 rounded md:mt-auto ${
-                currentTab === "setting" && "bg-slate-400"
-              }`}
-              onClick={handleOpenAppSetting}
-            >
-              <SettingIcon width={"37px"} height={"37px"} fill="#ffffff" />
-            </li>
           </ul>
         </div>
         <div className="p-2 bg-white flex-1 relative order-1 md:order-2">
@@ -79,7 +61,7 @@ const Sidebar = () => {
           {currentTab === "friend-request" && <FriendRequest />}
           {currentTab === "room" && <Room />}
         </div>
-        <AppSettings ref={dialogRef} handleCloseAppSetting={handleCloseAppSetting} />
+        <AppSettings />
       </div>
     </>
   );
