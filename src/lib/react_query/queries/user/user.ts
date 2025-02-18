@@ -131,3 +131,21 @@ export async function logout() {
 
   return res.json();
 }
+
+export async function login(email: string, password: string) {
+  const res = await fetch(apiUrl + "/auth/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({ email, password }),
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.message);
+  }
+
+  return res.json();
+}
