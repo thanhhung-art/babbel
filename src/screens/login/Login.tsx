@@ -1,9 +1,10 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { verifyUser } from "../../lib/react_query/queries/user/user";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { login, verifyUser } from "../../lib/react_query/queries/user/user";
 
 const Index = () => {
+  const [errors, setErrors] = useState({ email: "", password: "" });
   const email = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
@@ -13,29 +14,41 @@ const Index = () => {
     queryFn: verifyUser,
   });
 
+  const loginMutation = useMutation({
+    mutationFn: () => {
+      return login(email.current?.value || "", password.current?.value || "");
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(["user"], data);
+      navigate("/");
+    },
+    onError: (error) => {
+      if (error.message === "User not found") {
+        setErrors({ email: "User not found", password: "" });
+      }
+
+      if (error.message === "Invalid credentials") {
+        setErrors({ email: "", password: "Invalid credentials" });
+      }
+    },
+  });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const response = await fetch("http://localhost:3000/api/auth/login", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email.current?.value,
-        password: password.current?.value,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      queryClient.setQueryData(["user"], data);
-      navigate("/");
-    } else {
-      console.log;
+    if (!email.current?.value) {
+      setErrors({ email: "Email is required", password: "" });
+      return;
     }
+
+    if (!password.current?.value) {
+      setErrors({ email: "", password: "Password is required" });
+      return;
+    }
+
+    setErrors({ email: "", password: "" });
+
+    loginMutation.mutate();
   };
 
   useEffect(() => {
@@ -44,8 +57,12 @@ const Index = () => {
     }
   }, [data, navigate, isFetched]);
 
+  const resetErrors = () => {
+    setErrors({ email: "", password: "" });
+  };
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-300">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-300 px-4">
       <div className="flex flex-col bg-white shadow-md px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md w-full max-w-md">
         <div className="font-medium self-center text-xl sm:text-2xl uppercase text-gray-800">
           Login To Your Account
@@ -94,8 +111,14 @@ const Index = () => {
                   name="email"
                   className="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400"
                   placeholder="E-Mail Address"
+                  onFocus={resetErrors}
                 />
               </div>
+              {errors.email && (
+                <span className="text-red-500 text-xs mt-1">
+                  {errors.email}
+                </span>
+              )}
             </div>
             <div className="flex flex-col mb-6">
               <label
@@ -128,8 +151,14 @@ const Index = () => {
                   name="password"
                   className="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400"
                   placeholder="Password"
+                  onFocus={resetErrors}
                 />
               </div>
+              {errors.password && (
+                <span className="text-red-500 text-xs mt-1">
+                  {errors.password}
+                </span>
+              )}
             </div>
 
             <div className="flex items-center mb-6 -mt-4">
