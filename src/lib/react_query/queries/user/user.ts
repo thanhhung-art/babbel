@@ -115,3 +115,19 @@ export async function resetPassword(oldPassword: string, newPassword: string) {
 
   return res.json();
 }
+
+export async function logout() {
+  const res = await fetch(apiUrl + "/auth/logout", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to logout");
+  }
+
+  return res.json();
+}
