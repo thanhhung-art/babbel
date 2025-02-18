@@ -1,12 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import BellIcon from "../../assets/icons/BellIcon";
 import Avatar from "../../components/Avatar";
 import useAppStore from "../../lib/zustand/store";
-import { verifyUser } from "../../lib/react_query/queries/user/user";
+import { logout, verifyUser } from "../../lib/react_query/queries/user/user";
 import MenuIcon from "../../assets/icons/MenuIcon";
 import SettingIcon from "../../assets/icons/SettingIcon";
 import LogOutIcon from "../../assets/icons/LogOutIcon";
 import { createRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const dropdownMenu = useAppStore.getState().dropdownMenu;
@@ -18,6 +19,16 @@ const Navbar = () => {
     queryKey: ["user"],
     queryFn: verifyUser,
   });
+  const navigation = useNavigate();
+
+  const mutationLogOut = useMutation({
+    mutationFn: logout,
+  });
+
+  const handleLogout = () => {
+    mutationLogOut.mutate();
+    navigation("/login");
+  };
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -70,7 +81,10 @@ const Navbar = () => {
               >
                 <SettingIcon width={20} height={20} /> Setting
               </li>
-              <li className="flex gap-2 items-center px-4 py-3 cursor-pointer hover:bg-slate-200 active:bg-slate-300">
+              <li
+                className="flex gap-2 items-center px-4 py-3 cursor-pointer hover:bg-slate-200 active:bg-slate-300"
+                onClick={handleLogout}
+              >
                 <LogOutIcon width={20} height={20} /> Logout
               </li>
             </ul>
