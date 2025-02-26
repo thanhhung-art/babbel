@@ -17,9 +17,6 @@ const useSearchRooms = ({ inputValue }: IProps) => {
     onError: (error) => {
       console.error("Error searching rooms:", error);
     },
-    onSuccess: (data) => {
-      console.log("Search results:", data);
-    },
   });
 
   const handleSendSearch = async () => {
