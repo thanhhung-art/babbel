@@ -1,5 +1,5 @@
 import { FriendRequest, Friends } from "./friend";
-import { Message } from "./message";
+import { IMessage } from "./message";
 import { RoomMember, BannedUser, JoinRequest, RoomAdmin } from "./room";
 
 export interface User {
@@ -10,7 +10,7 @@ export interface User {
   createdAt: Date;
   updateAt: Date;
   rooms: RoomMember[];
-  messages: Message[];
+  messages: IMessage[];
   friends: Friends[];
   friendOf: Friends[];
   BannedUser: BannedUser[];
@@ -18,4 +18,13 @@ export interface User {
   FriendRequest: FriendRequest[];
   RequestFriend: FriendRequest[];
   RoomAdmin: RoomAdmin[];
+}
+
+export interface IUsersSearchQuery {
+  id: string;
+  email: string;
+  avatar: string;
+  createdAt: string;
+  updateAt: string;
+  name: string;
 }
