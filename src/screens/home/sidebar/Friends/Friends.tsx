@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { chatting, friends } from "../../../../utils/contants";
-import Search from "../../../../components/Search";
 import useAppStore from "../../../../lib/zustand/store";
 import Friend from "./Friend";
 import { useRef, useState } from "react";
@@ -11,13 +10,14 @@ import {
   blockUserQuery,
   unfriendQuery,
 } from "../../../../lib/react_query/queries/user/friend";
+import SearchUsers from "../../../../components/search/searchUsers";
 
 const Friends = () => {
   const queryClient = useQueryClient();
   const setCurrentFriendId = useAppStore((state) => state.setCurrentFriendId);
   const setCurrentRoomId = useAppStore((state) => state.setCurrentRoomId);
   const setCurrentConversationId = useAppStore(
-    (state) => state.setCurrentConversationId,
+    (state) => state.setCurrentConversationId
   );
   const [dialogType, setDialogType] = useState<"block" | "unfriend" | "">("");
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -86,7 +86,7 @@ const Friends = () => {
 
   return (
     <div className="pt-1">
-      <Search type="user" />
+      <SearchUsers />
       {data && data.length === 0 ? (
         <h4 className="text-center mt-4">No friends</h4>
       ) : (
@@ -107,7 +107,7 @@ const Friends = () => {
         <div className="p-4">
           <div className="flex justify-end">
             <div className="border cursor-pointer" onClick={handleCloseDialog}>
-              <XIcon w={18} h={18} />
+              <XIcon width={18} height={18} />
             </div>
           </div>
           <h3 className="text-lg font-semibold mt-2">{`Are you want to ${dialogType} this user?`}</h3>
