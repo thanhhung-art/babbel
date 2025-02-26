@@ -1,4 +1,4 @@
-import { User } from "../../../../types/user";
+import { IUsersSearchQuery, User } from "../../../../types/user";
 import { apiUrl } from "../ApiUrl";
 
 export async function verifyUser(): Promise<User> {
@@ -166,6 +166,24 @@ export async function registerQuery(
   if (!res.ok) {
     const errorData = await res.json();
     throw new Error(errorData.message);
+  }
+
+  return res.json();
+}
+
+export async function searchUsersQuery(
+  query: string
+): Promise<IUsersSearchQuery[]> {
+  const res = await fetch(apiUrl + "/user/search?value=" + query, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to search users");
   }
 
   return res.json();
