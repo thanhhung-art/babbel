@@ -2,6 +2,7 @@ import { apiUrl } from "../ApiUrl";
 import {
   IRoomJoinedQuery,
   IRoomMemberQuery,
+  IRoomSearchQuery,
   IUpdateRoom,
 } from "../../../../types/room";
 
@@ -70,6 +71,24 @@ export async function finRoomById(id: string): Promise<{
   updateAt: string;
 }> {
   const res = await fetch(`${apiUrl}/room/${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    throw new Error(res.statusText);
+  }
+
+  return res.json();
+}
+
+export async function searchRoomByNameQuery(
+  query: string
+): Promise<IRoomSearchQuery[]> {
+  const res = await fetch(`${apiUrl}/room/search?value=${query}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
