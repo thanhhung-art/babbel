@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { chatting, roomsJoined } from "../../../utils/contants";
 import Avatar from "../../../components/Avatar";
-import Search from "../../../components/Search";
 import useAppStore from "../../../lib/zustand/store";
 import { addConversationToChatQuery } from "../../../lib/react_query/queries/utils";
 import {
@@ -10,6 +9,7 @@ import {
 } from "../../../lib/react_query/queries/room/room";
 import PlusIcon from "../../../assets/icons/PlusIcon";
 import { createRef } from "react";
+import SearchRooms from "../../../components/search/SearchRooms";
 
 const Room = () => {
   const queryClient = useQueryClient();
@@ -99,7 +99,7 @@ const Room = () => {
   if (data?.length === 0) {
     return (
       <div className="mt-1">
-        <Search type="room" />
+        {/* <Search type="room" /> */}
         <p className="mt-4 text-center">No rooms joined</p>
       </div>
     );
@@ -107,9 +107,10 @@ const Room = () => {
 
   return (
     <div className="pt-1">
-      <Search type="room" />
+      <SearchRooms />
       <ul className="mt-3">
         {data &&
+          data.length > 0 &&
           data.map((room) => (
             <li
               key={room.id}
