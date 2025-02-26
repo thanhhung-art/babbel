@@ -1,7 +1,7 @@
 import { createRef, useMemo } from "react";
 import SearchIcon from "../../assets/icons/SearchIcon";
 import Avatar from "../Avatar";
-import useSearchUsers from "../../hooks/friends/search/useSearchUsers";
+import useSearchUsers from "../../hooks/friends/useSearchUsers";
 import { useQuery } from "@tanstack/react-query";
 import { friends } from "../../utils/contants";
 import { getFriends } from "../../lib/react_query/queries/user/friend";
