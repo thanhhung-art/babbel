@@ -10,7 +10,7 @@ import {
   blockUserQuery,
   unfriendQuery,
 } from "../../../../lib/react_query/queries/user/friend";
-import SearchUsers from "../../../../components/search/searchUsers";
+import SearchUsers from "../../../../components/search/SearchUsers";
 
 const Friends = () => {
   const queryClient = useQueryClient();
