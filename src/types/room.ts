@@ -21,6 +21,14 @@ export interface RoomMember {
   joinedAt: Date;
 }
 
+export interface IRoomSearchQuery {
+  id: string;
+  name: string;
+  avatar: string;
+  createdAt: string;
+  updateAt: string;
+}
+
 export interface BannedUser {
   id: string;
   userId: string;
