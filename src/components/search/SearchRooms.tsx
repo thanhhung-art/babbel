@@ -71,7 +71,7 @@ const SearchRooms = () => {
                 return (
                   <li key={room.id} className="flex items-center gap-4">
                     <Avatar width="w-12" height="h-12" name={room.name} />
-                    <h4 className="flex-1">{room.name}</h4>
+                    <h4 className="flex-1 font-semibold">{room.name}</h4>
                     <div>
                       <button
                         className={`border rounded-full ${
