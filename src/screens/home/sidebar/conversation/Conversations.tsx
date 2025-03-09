@@ -3,6 +3,7 @@ import { chatting } from "../../../../utils/contants";
 import Conversation from "./Conversation";
 import { getChattingQuery } from "../../../../lib/react_query/queries/user/friend";
 import { removeChattingConveration } from "../../../../lib/react_query/queries/user/user";
+import SearchChatting from "../../../../components/search/SearchChatting";
 
 const Conversations = () => {
   const queryClient = useQueryClient();
@@ -30,7 +31,8 @@ const Conversations = () => {
     );
 
   return (
-    <>
+    <div>
+      <SearchChatting />
       {data &&
         data.map((conversation) => (
           <Conversation
@@ -40,7 +42,7 @@ const Conversations = () => {
             roomId={conversation.roomId}
           />
         ))}
-    </>
+    </div>
   );
 };
 
