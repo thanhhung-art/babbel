@@ -1,3 +1,4 @@
+import { IChatting } from "../../../../types/conversation";
 import { IUsersSearchQuery, User } from "../../../../types/user";
 import { apiUrl } from "../ApiUrl";
 
@@ -184,6 +185,22 @@ export async function searchUsersQuery(
 
   if (!res.ok) {
     throw new Error("Failed to search users");
+  }
+
+  return res.json();
+}
+
+export async function searchChattingQuery(name: string): Promise<IChatting[]> {
+  const res = await fetch(apiUrl + "/user/search-chatting?name=" + name, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to search chatting");
   }
 
   return res.json();
