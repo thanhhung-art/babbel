@@ -127,11 +127,11 @@ const Room = () => {
           className="bg-blue-500 p-2 rounded-full cursor-pointer hover:bg-blue-600 active:bg-blue-700"
           onClick={handleOpenModal}
         >
-          <PlusIcon width={40} height={40} />
+          <PlusIcon width={30} height={30} />
         </div>
       </div>
-      <dialog ref={modalRef} className="rounded-lg">
-        <div className="dialog-container p-4 rounded-lg w-[400px]">
+      <dialog ref={modalRef} className="rounded-lg w-full md:w-[400px]">
+        <div className="dialog-container p-4 rounded-lg w-full">
           <form onSubmit={handleCreateRoom}>
             <div className="flex flex-col">
               <label htmlFor="room-name-create">Room name:</label>
