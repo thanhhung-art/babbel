@@ -58,7 +58,7 @@ const SearchChatting = () => {
             <input
               id="search-chat"
               type="text"
-              placeholder="Search chats..."
+              placeholder="Search chat..."
               className="w-full outline-none"
               onFocus={handleOpenSearch}
               ref={inputRef}
