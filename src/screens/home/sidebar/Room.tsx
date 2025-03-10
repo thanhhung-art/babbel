@@ -106,78 +106,130 @@ const Room = () => {
   }
 
   return (
-    <div className="pt-1">
+    <div className="pt-1 relative h-full">
       <SearchRooms />
-      <ul className="mt-3">
+
+      {/* Room List */}
+      <ul className="mt-3 space-y-2 max-h-[calc(100vh-200px)] overflow-y-auto">
         {data &&
           data.length > 0 &&
           data.map((room) => (
             <li
               key={room.id}
-              className="flex gap-4 items-center p-2 cursor-pointer rounded hover:bg-slate-100"
+              className="flex gap-4 items-center p-3 cursor-pointer rounded-lg hover:bg-slate-100 transition-colors duration-200 shadow-sm border border-gray-100"
               onClick={() => handleSetState(room.id)}
             >
               <Avatar width="w-12" height="h-12" name={room.name} />
-              <h4>{room.name}</h4>
+              <div>
+                <h4 className="font-medium text-gray-800">{room.name}</h4>
+                {/* {room.description && (
+                  <p className="text-sm text-gray-500 truncate max-w-[200px]">
+                    {room.description}
+                  </p>
+                )} */}
+              </div>
             </li>
           ))}
       </ul>
+
+      {/* Create Room Button */}
       <div className="absolute bottom-8 right-8">
         <div
-          className="bg-blue-500 p-2 rounded-full cursor-pointer hover:bg-blue-600 active:bg-blue-700"
+          className="bg-blue-500 p-3 rounded-full cursor-pointer hover:bg-blue-600 active:bg-blue-700 transition-colors duration-200 shadow-lg"
           onClick={handleOpenModal}
         >
-          <PlusIcon width={30} height={30} />
+          <PlusIcon width={24} height={24} className="text-white" />
         </div>
       </div>
-      <dialog ref={modalRef} className="rounded-lg w-full md:w-[400px]">
-        <div className="dialog-container p-4 rounded-lg w-full">
-          <form onSubmit={handleCreateRoom}>
-            <div className="flex flex-col">
-              <label htmlFor="room-name-create">Room name:</label>
+
+      {/* Create Room Dialog */}
+      <dialog ref={modalRef} className="rounded-xl w-full md:w-[450px] p-0">
+        <div className="dialog-container p-6">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-semibold text-gray-800">
+              Create New Room
+            </h2>
+            <button
+              onClick={() => modalRef.current?.close()}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              ✕
+            </button>
+          </div>
+
+          <form onSubmit={handleCreateRoom} className="space-y-6">
+            <div className="space-y-2">
+              <label
+                htmlFor="room-name-create"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Room name
+              </label>
               <input
                 id="room-name-create"
                 type="text"
                 ref={roomName}
-                placeholder="type room name"
+                placeholder="Enter room name"
                 maxLength={50}
-                className="text-sm border border-black outline-none mt-2 py-2 px-2 rounded-lg"
+                className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
               />
             </div>
 
-            <div className="flex flex-col my-4">
-              <label htmlFor="room-desc-create">Room description:</label>
+            <div className="space-y-2">
+              <label
+                htmlFor="room-desc-create"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Description
+              </label>
               <input
                 id="room-desc-create"
                 ref={roomDesc}
                 type="text"
-                placeholder="type room description"
+                placeholder="Enter room description"
                 maxLength={100}
-                className="text-sm border border-black outline-none mt-2 p-2 rounded-lg"
+                className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
               />
             </div>
 
-            <div className="mb-8">
-              <h4 className="mb-2">Public</h4>
-              <label
-                htmlFor="switch"
-                className="relative w-[40px] h-[24px] inline-block"
-                onClick={handleTolgglePrivate}
-              >
-                <input
-                  ref={roomPrivate}
-                  title="switch"
-                  id="switch"
-                  type="checkbox"
-                  className="w-0 h-0 peer"
-                />
-                <span className="absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-gray-200 transition-all peer-checked:bg-blue-500 peer-focus:shadow slider rounded-[30px]"></span>
-              </label>
+            <div className="flex items-center justify-between">
+              <div className="space-y-2">
+                <h4 className="text-sm font-medium text-gray-700">
+                  Room Privacy
+                </h4>
+                <label
+                  htmlFor="switch"
+                  className="relative inline-flex items-center cursor-pointer"
+                  onClick={handleTolgglePrivate}
+                >
+                  <input
+                    ref={roomPrivate}
+                    title="switch"
+                    id="switch"
+                    type="checkbox"
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+                  <span className="ml-3 text-sm font-medium text-gray-700">
+                    {roomPrivate.current?.checked ? "Public" : "Private"}
+                  </span>
+                </label>
+              </div>
             </div>
 
-            <div className="flex justify-end">
-              <button className="bg-blue-500 text-white text-sm px-4 py-2 rounded-full hover:bg-blue-500 active:bg-blue-700 cursor-pointer">
-                Submit
+            <div className="flex justify-end gap-3 pt-4 border-t">
+              <button
+                type="button"
+                onClick={() => modalRef.current?.close()}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              >
+                Create Room
               </button>
             </div>
           </form>
