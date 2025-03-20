@@ -48,30 +48,35 @@ const SearchChatting = () => {
   };
 
   return (
-    <div>
+    <div className="relative w-full">
       <div
-        className="border rounded-lg bg-white flex items-center relative search-container"
+        className="flex items-center gap-2 px-3 py-3 bg-white border border-gray-200 rounded-lg 
+                   hover:border-gray-300 focus-within:border-blue-500 focus-within:ring-2 
+                   focus-within:ring-blue-100 transition-all duration-200"
         ref={searchContainer}
       >
-        <div className="flex-1 pl-3">
-          <label htmlFor="search-chat" className="border w-full">
-            <input
-              id="search-chat"
-              type="text"
-              placeholder="Search chat..."
-              className="w-full outline-none"
-              onFocus={handleOpenSearch}
-              ref={inputRef}
-              onChange={handleSendSearch}
-            />
-          </label>
-        </div>
-        <span
-          className="cursor-pointer border p-2"
+        <SearchIcon
+          width={18}
+          height={18}
+          className="text-gray-400 flex-shrink-0"
+        />
+        <input
+          id="search-chat"
+          type="text"
+          placeholder="Search conversations..."
+          className="w-full text-sm text-gray-700 placeholder:text-gray-400 outline-none"
+          onFocus={handleOpenSearch}
+          ref={inputRef}
+          onChange={handleSendSearch}
+        />
+        <button
           onClick={handleSearchChatting}
+          className="p-1.5 rounded-md hover:bg-gray-100 active:bg-gray-200 
+                     transition-colors duration-200 flex-shrink-0"
+          aria-label="Search"
         >
-          <SearchIcon width={24} height={24} />
-        </span>
+          <SearchIcon width={18} height={18} className="text-gray-500" />
+        </button>
       </div>
     </div>
   );

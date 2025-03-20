@@ -38,55 +38,71 @@ const SearchRooms = () => {
     !!searchRoomsMutation.data && !!searchRoomsMutation.data.length;
 
   return (
-    <div>
-      <div
-        className="border rounded-lg bg-white flex items-center relative search-container"
-        ref={searchContainer}
-      >
-        <div className="flex-1 pl-3">
-          <label htmlFor="search-room" className="border w-full">
-            <input
-              id="search-room"
-              type="text"
-              placeholder="Search rooms..."
-              className="w-full outline-none"
-              onFocus={handleOpenSearch}
-              ref={inputValue}
-              onChange={handleSendSearch}
-            />
-          </label>
+    <div className="">
+      <div className="relative search-container">
+        <div
+          className="flex items-center gap-2 px-3 py-4 bg-white border border-gray-200 rounded-lg hover:border-gray-300 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100 transition-all duration-200"
+          ref={searchContainer}
+        >
+          <SearchIcon width={20} height={20} className="text-gray-400" />
+          <input
+            id="search-room"
+            type="text"
+            placeholder="Search rooms..."
+            className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400"
+            onFocus={handleOpenSearch}
+            ref={inputValue}
+            onChange={handleSendSearch}
+          />
         </div>
-        <span className="cursor-pointer border p-2">
-          <SearchIcon width={24} height={24} />
-        </span>
+
+        {/* Search Results Dropdown */}
         {isRenderResults && (
           <div
-            className="absolute top-full w-full z-30 block"
             ref={dataResultsContainer}
+            className="absolute top-full left-0 right-0 mt-2 z-30 bg-white rounded-lg border border-gray-200 shadow-lg overflow-hidden"
           >
-            <ul className="flex flex-col gap-4 bg-white border rounded-lg p-4">
-              {searchRoomsMutation.data.map((room) => {
-                const isJoined = roomJoinedArray.includes(room.id);
+            <div className="max-h-[300px] overflow-y-auto">
+              <ul className="divide-y divide-gray-100">
+                {searchRoomsMutation.data.map((room) => {
+                  const isJoined = roomJoinedArray.includes(room.id);
 
-                return (
-                  <li key={room.id} className="flex items-center gap-4">
-                    <Avatar width="w-12" height="h-12" name={room.name} />
-                    <h4 className="flex-1 font-semibold">{room.name}</h4>
-                    <div>
+                  return (
+                    <li
+                      key={room.id}
+                      className="flex items-center gap-4 p-4 hover:bg-gray-50 transition-colors duration-200"
+                    >
+                      <Avatar width="w-10" height="h-10" name={room.name} />
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-medium text-gray-900 truncate">
+                          {room.name}
+                        </h4>
+                        {/* {room.description && (
+                          <p className="text-sm text-gray-500 truncate">
+                            {room.description}
+                          </p>
+                        )} */}
+                      </div>
                       <button
-                        className={`border rounded-full ${
-                          isJoined ? "bg-gray-300" : "bg-blue-500"
-                        } px-4 py-2 text-white hover:bg-blue-600 active:bg-blue-700`}
+                        className={`
+                          px-4 py-1.5 rounded-full text-sm font-medium 
+                          transition-all duration-200
+                          ${
+                            isJoined
+                              ? "bg-gray-100 text-gray-600 cursor-not-allowed"
+                              : "bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700"
+                          }
+                        `}
                         disabled={isJoined}
                         onClick={() => handleSendJoinRoom(room.id)}
                       >
                         {isJoined ? "Joined" : "Join"}
                       </button>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           </div>
         )}
       </div>
