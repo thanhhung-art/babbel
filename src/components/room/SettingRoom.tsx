@@ -94,39 +94,77 @@ const SettingRoom = ({ dialog }: IProps) => {
   }, [data]);
 
   return (
-    <div className="pl-4">
-      <div className="">
-        <div className="m-auto w-fit my-6">
-          <Avatar width="w-24" height="h-24" name="room 1" />
+    <div className="p-6">
+      {/* Header Section */}
+      <div className="flex flex-col items-center mb-8">
+        <div className="relative">
+          <Avatar
+            width="w-24"
+            height="h-24"
+            name={data?.name || "Room"}
+          />
+          <div className="absolute bottom-0 right-0 p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors duration-200">
+            {/* <EditIcon width={16} height={16} className="text-gray-600" /> */}
+          </div>
         </div>
-        <div className="mb-4">
-          <label htmlFor="room-name">Name</label>
+        <h2 className="mt-4 text-xl font-semibold text-gray-900">
+          {data?.name || "Room Settings"}
+        </h2>
+      </div>
+
+      {/* Form Section */}
+      <div className="space-y-6">
+        {/* Room Name */}
+        <div className="space-y-2">
+          <label
+            htmlFor="room-name"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Room Name
+          </label>
           <input
             ref={roomName}
             id="room-name"
             type="text"
-            placeholder="name"
-            className="border border-gray-400 w-full p-2 rounded-lg outline-none"
+            placeholder="Enter room name"
+            className="w-full px-4 py-2 text-gray-700 border border-gray-300 rounded-lg 
+                     focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
+                     placeholder:text-gray-400 transition-all duration-200"
             defaultValue={data?.name || ""}
           />
         </div>
 
-        <div>
-          <label htmlFor="room-description">Description</label>
+        {/* Room Description */}
+        <div className="space-y-2">
+          <label
+            htmlFor="room-description"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Description
+          </label>
           <textarea
             ref={roomDescription}
             id="room-description"
-            placeholder="description"
-            className="border border-gray-400 w-full p-2 rounded-lg outline-none"
+            placeholder="Enter room description"
+            rows={4}
+            className="w-full px-4 py-2 text-gray-700 border border-gray-300 rounded-lg 
+                     focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
+                     placeholder:text-gray-400 transition-all duration-200 resize-none"
             defaultValue={data?.description || ""}
           />
         </div>
 
-        <div className="mt-2">
-          <h4 className="mb-1">Private</h4>
+        {/* Privacy Toggle */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h4 className="text-sm font-medium text-gray-700">Private Room</h4>
+            <p className="text-sm text-gray-500">
+              Only invited members can join
+            </p>
+          </div>
           <label
             htmlFor="switch"
-            className="relative w-[40px] h-[24px] inline-block"
+            className="relative inline-flex items-center cursor-pointer"
             onClick={handleTolgglePrivate}
           >
             <input
@@ -134,43 +172,51 @@ const SettingRoom = ({ dialog }: IProps) => {
               title="switch"
               id="switch"
               type="checkbox"
-              className="w-0 h-0 peer switch"
+              className="sr-only peer"
             />
-            <span className="absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-gray-200 transition-all peer-checked:bg-blue-500 peer-focus:shadow slider rounded-[30px]"></span>
+            <div
+              className="w-11 h-6 bg-gray-200 rounded-full peer 
+                          peer-checked:after:translate-x-full peer-checked:after:border-white 
+                          after:content-[''] after:absolute after:top-0.5 after:left-[2px] 
+                          after:bg-white after:border-gray-300 after:border after:rounded-full 
+                          after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"
+            ></div>
           </label>
         </div>
 
-        <div className="flex flex-col gap-2 items-end mt-5">
+        {/* Action Buttons */}
+        <div className="flex flex-col gap-3 pt-6 border-t">
           <button
-            className="bg-blue-500 w-[110px] py-2  text-white rounded-lg text-sm hover:bg-blue-600 active:bg-blue-700"
+            className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-500 
+                     rounded-lg hover:bg-blue-600 active:bg-blue-700 disabled:opacity-50 
+                     transition-colors duration-200 flex items-center justify-center"
             onClick={hanldeUpdateRoom}
             disabled={updateRoomMutation.isPending}
           >
             {updateRoomMutation.isPending ? (
-              <div className="flex gap-2 items-center px-2">
-                <div className="animate-spin w-fit h-fit">
-                  <LoadingIcon width={20} height={20} />
-                </div>
-                <p className="text-sm">loading...</p>
+              <div className="flex items-center gap-2">
+                <LoadingIcon width={16} height={16} className="animate-spin" />
+                <span>Updating...</span>
               </div>
             ) : (
-              "update"
+              "Save Changes"
             )}
           </button>
+
           <button
-            className="bg-red-500 w-[110px] py-2 text-white rounded-lg text-sm hover:bg-red-600 active:bg-red-700"
+            className="w-full px-4 py-2 text-sm font-medium text-red-600 bg-red-50 
+                     rounded-lg hover:bg-red-100 active:bg-red-200 disabled:opacity-50 
+                     transition-colors duration-200 flex items-center justify-center"
             onClick={handleDeleteRoom}
             disabled={deleteRoomMutation.isPending}
           >
             {deleteRoomMutation.isPending ? (
-              <div className="flex gap-2 items-center px-2">
-                <div className="animate-spin w-fit h-fit">
-                  <LoadingIcon width={20} height={20} />
-                </div>
-                <p className="text-sm">loading...</p>
+              <div className="flex items-center gap-2">
+                <LoadingIcon width={16} height={16} className="animate-spin" />
+                <span>Deleting...</span>
               </div>
             ) : (
-              "delete"
+              "Delete Room"
             )}
           </button>
         </div>
