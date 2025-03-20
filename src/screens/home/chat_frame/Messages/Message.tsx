@@ -1,9 +1,10 @@
-import { MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
+import { MutableRefObject, useEffect, useMemo, useRef } from "react";
 import { IMessage } from "../../../../types/message";
 import { timeAgo } from "../../../../utils/timeAgo";
 import Avatar from "../../../../components/Avatar";
 import DeleteIcon from "../../../../assets/icons/DeleteIcon";
 import UpdateIcon from "../../../../assets/icons/UpdateIcon";
+import DotMenuIcon from "../../../../assets/icons/DotMenuIcon";
 interface IProps {
   message: IMessage;
   isUser: boolean;
@@ -25,26 +26,16 @@ const Message = ({
   handleOpenUpdateDialog,
   handleScrollIntoView,
 }: IProps) => {
-  const [showOptions, setShowOptions] = useState(false);
   const optionsContainerRef = useRef<HTMLDivElement>(null);
   const date = useMemo(
     () => timeAgo(message.createdAt || ""),
     [message.createdAt]
   );
+
   const handleToggleOptions = () => {
-    setShowOptions((prev) => !prev);
-  };
-
-  const handleMouseLeave = () => {
-    setShowOptions(false);
-  };
-
-  const handleClickOutside = (e: MouseEvent) => {
-    if (
-      optionsContainerRef.current &&
-      !optionsContainerRef.current.contains(e.target as Node)
-    ) {
-      setShowOptions(false);
+    const optionsContainer = optionsContainerRef.current;
+    if (optionsContainer) {
+      optionsContainer.classList.toggle("hidden");
     }
   };
 
@@ -61,98 +52,103 @@ const Message = ({
     });
   }, [message.files, handleScrollIntoView]);
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   return (
     <div
-      className={`flex ${isUser && "justify-end"} group mt-2`}
-      onMouseLeave={handleMouseLeave}
+      className={`group flex items-start gap-2 hover:bg-gray-50/50 transition-colors duration-200 ${
+        isUser ? "flex-row-reverse" : ""
+      }`}
     >
-      <div className="flex gap-4">
-        {!isUser && (
-          <div>
-            <Avatar width="w-14" height="h-14" name={username} />
-          </div>
-        )}
-        <div className="relative">
+      {/* Avatar */}
+      {!isUser && (
+        <div className="flex-shrink-0">
+          <Avatar width="w-10" height="h-10" name={username} />
+        </div>
+      )}
+
+      {/* Message Content */}
+      <div
+        className={`flex flex-col gap-1 max-w-[70%] ${
+          isUser ? "items-end" : "items-start"
+        }`}
+      >
+        <div className={`relative group ${isUser && "z-10"}`}>
+          {/* Text Message */}
           {message.content && (
-            <p
-              className={`p-3 md:p-4 ${
-                isUser ? "bg-blue-500 text-white" : "bg-white"
-              } rounded-full`}
+            <div
+              className={`
+                px-4 py-2 rounded-2xl break-words
+                ${
+                  isUser
+                    ? "bg-blue-500 text-white"
+                    : "bg-white border border-gray-200"
+                }
+              `}
             >
-              {message.content}
-            </p>
+              <p className="text-sm">{message.content}</p>
+            </div>
           )}
+
+          {/* Images */}
           {message.files?.length > 0 && (
-            <div className={`${message.content && "mt-2"}`}>
+            <div className={`${message.content ? "mt-2" : ""} space-y-2`}>
               {message.files?.map((file, index) => (
                 <img
                   key={index}
                   data-src={file.url}
                   src={file.url}
-                  alt="file"
-                  className="rounded-lg max-w-[300px] md:max-w-[500px] md:rounded"
+                  alt="attachment"
+                  className="rounded-lg max-w-[300px] md:max-w-[400px] hover:opacity-95 transition-opacity duration-200"
+                  loading="lazy"
                 />
               ))}
             </div>
           )}
+
+          {/* Message Options */}
           {isUser && (
-            <div
-              className={`absolute right-full top-0 hidden group-hover:block`}
-            >
+            <div className="absolute top-1/2 -translate-y-1/2 right-full mr-2 option-container">
               <div
-                className="flex flex-col justify-center items-center gap-1 w-10 h-10 rounded-full bg-white shadow cursor-pointer mr-2 active:bg-gray-100 relative"
+                className="p-1.5 rounded-full opacity-0 group-hover:opacity-100 hover:bg-gray-100 transition-all duration-200"
                 onClick={handleToggleOptions}
               >
-                <div className="w-[3px] h-[3px] rounded-full bg-black"></div>
-                <div className="w-[3px] h-[3px] rounded-full bg-black"></div>
-                <div className="w-[3px] h-[3px] rounded-full bg-black"></div>
+                <DotMenuIcon w={16} h={16} />
               </div>
 
-              {showOptions && (
-                <div
-                  ref={optionsContainerRef}
-                  className="absolute right-full top-0"
-                >
-                  <div className="mr-2 bg-white p-2">
-                    <div
-                      className="flex gap-2 items-center cursor-pointer hover:bg-slate-100 p-1 rounded"
-                      onClick={() => {
-                        idMessageToUpdate.current = message.id;
-                        handleOpenUpdateDialog();
-                      }}
-                    >
-                      <p className="text-blue-500 text-sm">Update</p>
-                      <UpdateIcon width={24} height={24} />
-                    </div>
-
-                    <div
-                      className="flex gap-2 items-center cursor-pointer hover:bg-slate-100 p-1 rounded"
-                      onClick={() => {
-                        idMessageToDelete.current = message.id;
-                        handleOpenDeleteDialog();
-                      }}
-                    >
-                      <p className="text-red-500 text-sm pr-1">Delete</p>
-                      <DeleteIcon width={24} height={24} />
-                    </div>
-                  </div>
+              <div
+                ref={optionsContainerRef}
+                className="absolute right-full top-full -left-7 mt-1 mr-1 z-10 hidden"
+              >
+                <div className="bg-white rounded-lg shadow-lg border border-gray-200   w-32">
+                  <button
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-blue-600 hover:bg-gray-50 transition-colors duration-200"
+                    onClick={() => {
+                      idMessageToUpdate.current = message.id;
+                      handleOpenUpdateDialog();
+                    }}
+                  >
+                    <UpdateIcon width={16} height={16} />
+                    <span>Edit</span>
+                  </button>
+                  <button
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-gray-50 transition-colors duration-200"
+                    onClick={() => {
+                      idMessageToDelete.current = message.id;
+                      handleOpenDeleteDialog();
+                    }}
+                  >
+                    <DeleteIcon width={16} height={16} />
+                    <span>Delete</span>
+                  </button>
                 </div>
-              )}
+              </div>
             </div>
           )}
-
-          <div className={`flex ${isUser && "justify-end"}`}>
-            <span className="text-sm text-gray-600">{date}</span>
-          </div>
         </div>
+
+        {/* Timestamp */}
+        <span className={`text-xs text-gray-500 ${isUser ? "pr-4" : "pl-4"}`}>
+          {date}
+        </span>
       </div>
     </div>
   );

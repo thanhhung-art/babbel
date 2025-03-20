@@ -191,64 +191,114 @@ const Messages = () => {
     };
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <div className="animate-pulse space-y-4 w-full px-6">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="flex items-start gap-4">
+              <div className="w-10 h-10 bg-gray-200 rounded-full" />
+              <div className="flex-1 space-y-2">
+                <div className="h-4 bg-gray-200 rounded w-1/4" />
+                <div className="h-16 bg-gray-200 rounded" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
-      {messages.map((message) => {
-        const isUser = userData.data?.id === message.userId;
+      <div className="flex flex-col">
+        {messages.map((message) => {
+          const isUser = userData.data?.id === message.userId;
+          return (
+            <Message
+              key={message.id}
+              message={message}
+              isUser={isUser}
+              handleOpenDeleteDialog={handleOpenDeleteDialog}
+              handleOpenUpdateDialog={handleOpenUpdateDialog}
+              idMessageToDelete={idMessageToDelete}
+              idMessageToUpdate={idMessageToUpdate}
+              username={message.user?.name}
+              handleScrollIntoView={handleScrollIntoView}
+            />
+          );
+        })}
+        <div ref={anchorRef}></div>
+      </div>
 
-        return (
-          <Message
-            key={message.id}
-            message={message}
-            isUser={isUser}
-            handleOpenDeleteDialog={handleOpenDeleteDialog}
-            handleOpenUpdateDialog={handleOpenUpdateDialog}
-            idMessageToDelete={idMessageToDelete}
-            idMessageToUpdate={idMessageToUpdate}
-            username={message.user?.name}
-            handleScrollIntoView={handleScrollIntoView}
-          />
-        );
-      })}
-      <div ref={anchorRef}></div>
-      <dialog ref={deleteDialogRef} className="p-4 shadow rounded-lg">
-        <p>Are you want to delete the message?</p>
-        <div className="flex justify-between mt-4">
-          <button
-            className="px-4 py-2 text-sm shadow bg-red-500 text-white rounded active:bg-red-700"
-            onClick={handleDeleteMessage}
-          >
-            delete
-          </button>
-          <button
-            className="px-4 py-2 text-sm shadow bg-blue-500 text-white rounded active:bg-blue-700"
-            onClick={handleCloseDeleteDialog}
-          >
-            close
-          </button>
+      {/* Delete Message Dialog */}
+      <dialog
+        ref={deleteDialogRef}
+        className="rounded-lg shadow-lg backdrop:bg-gray-900/50"
+      >
+        <div className="w-[320px] p-6 bg-white">
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            Delete Message
+          </h3>
+          <p className="text-gray-600 mb-6">
+            Are you sure you want to delete this message? This action cannot be
+            undone.
+          </p>
+          <div className="flex justify-end gap-3">
+            <button
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 
+                         rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 
+                         focus:ring-blue-500 transition-colors duration-200"
+              onClick={handleCloseDeleteDialog}
+            >
+              Cancel
+            </button>
+            <button
+              className="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-lg 
+                         hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 
+                         focus:ring-red-500 transition-colors duration-200"
+              onClick={handleDeleteMessage}
+            >
+              Delete
+            </button>
+          </div>
         </div>
       </dialog>
 
-      <dialog ref={updateDialogRef} className="p-4 shadow rounded-lg">
-        <textarea
-          ref={textAreaRef}
-          className="text-black outline-none border w-full p-2"
-        ></textarea>
-        <div className="flex justify-between mt-4">
-          <button
-            className="px-4 py-2 text-sm shadow bg-red-500 text-white rounded active:bg-red-700"
-            onClick={handleUpdateMessage}
-          >
-            update
-          </button>
-          <button
-            className="px-4 py-2 text-sm shadow bg-blue-500 text-white rounded active:bg-blue-700"
-            onClick={handleCloseUpdateDialog}
-          >
-            close
-          </button>
+      {/* Update Message Dialog */}
+      <dialog
+        ref={updateDialogRef}
+        className="rounded-lg shadow-lg backdrop:bg-gray-900/50"
+      >
+        <div className="w-[400px] p-6 bg-white">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Edit Message
+          </h3>
+          <textarea
+            ref={textAreaRef}
+            className="w-full h-32 p-3 text-gray-700 border border-gray-300 rounded-lg 
+                     focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
+                     resize-none transition-all duration-200"
+            placeholder="Type your message..."
+          ></textarea>
+          <div className="flex justify-end gap-3 mt-4">
+            <button
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 
+                         rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 
+                         focus:ring-blue-500 transition-colors duration-200"
+              onClick={handleCloseUpdateDialog}
+            >
+              Cancel
+            </button>
+            <button
+              className="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg 
+                         hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 
+                         focus:ring-blue-500 transition-colors duration-200"
+              onClick={handleUpdateMessage}
+            >
+              Save Changes
+            </button>
+          </div>
         </div>
       </dialog>
     </>
