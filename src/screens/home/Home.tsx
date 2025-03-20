@@ -7,6 +7,7 @@ import { user } from "../../utils/contants";
 import { useQuery } from "@tanstack/react-query";
 import useAppStore from "../../lib/zustand/store";
 import { verifyUser } from "../../lib/react_query/queries/user/user";
+import useHandleClickOutside from "../../hooks/utils/useHandleClickOutside";
 
 const Home = () => {
   const setOnlineFriends = useAppStore((state) => state.setOnlineFriends);
@@ -87,6 +88,8 @@ const Home = () => {
       dialogs.forEach(removeListenerFromDialog);
     };
   });
+
+  useHandleClickOutside();
 
   return (
     <div className="flex flex-col h-screen">
