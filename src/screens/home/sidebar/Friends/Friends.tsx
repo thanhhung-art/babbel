@@ -85,12 +85,19 @@ const Friends = () => {
   };
 
   return (
-    <div className="pt-1">
+    <div className="pt-1 px-2">
       <SearchUsers />
+
+      {/* Friends List */}
       {data && data.length === 0 ? (
-        <h4 className="text-center mt-4">No friends</h4>
+        <div className="flex flex-col items-center justify-center mt-8 text-gray-500">
+          <p className="text-lg font-medium">No friends yet</p>
+          <p className="text-sm mt-1">
+            Use the search bar above to find friends
+          </p>
+        </div>
       ) : (
-        <ul className="mt-3">
+        <ul className="mt-4 space-y-2 max-h-[calc(100vh-200px)] overflow-y-auto pr-1">
           {data &&
             data.map((friend) => (
               <Friend
@@ -103,27 +110,54 @@ const Friends = () => {
             ))}
         </ul>
       )}
-      <dialog ref={dialogRef}>
-        <div className="p-4">
-          <div className="flex justify-end">
-            <div className="border cursor-pointer" onClick={handleCloseDialog}>
-              <XIcon width={18} height={18} />
-            </div>
-          </div>
-          <h3 className="text-lg font-semibold mt-2">{`Are you want to ${dialogType} this user?`}</h3>
-          <div className="flex justify-between mt-4">
+
+      {/* Confirmation Dialog */}
+      <dialog
+        ref={dialogRef}
+        className="rounded-lg shadow-xl p-0 backdrop:bg-gray-900/50"
+      >
+        <div className="w-[320px] bg-white rounded-lg">
+          <div className="flex items-center justify-between p-4 border-b">
+            <h3 className="text-lg font-semibold text-gray-900">
+              Confirm {dialogType}
+            </h3>
             <button
-              className="border px-4 py-1 text-sm rounded-full text-white bg-blue-500 active:bg-blue-600"
               onClick={handleCloseDialog}
+              className="p-1 rounded-full hover:bg-gray-100 transition-colors duration-200"
             >
-              No
+              <XIcon width={20} height={20} className="text-gray-500" />
             </button>
-            <button
-              className="border px-4 py-1 text-sm rounded-full text-white bg-red-500 active:bg-red-600"
-              onClick={handleProcessDialog}
-            >
-              Yes
-            </button>
+          </div>
+
+          <div className="p-4">
+            <p className="text-gray-600">
+              Are you sure you want to {dialogType} this user? This action
+              cannot be undone.
+            </p>
+
+            <div className="flex items-center justify-end gap-3 mt-6">
+              <button
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+                onClick={handleCloseDialog}
+              >
+                Cancel
+              </button>
+              <button
+                className={`
+                  px-4 py-2 text-sm font-medium text-white rounded-lg
+                  focus:outline-none focus:ring-2 focus:ring-offset-2
+                  transition-colors duration-200
+                  ${
+                    dialogType === "block"
+                      ? "bg-red-500 hover:bg-red-600 focus:ring-red-500"
+                      : "bg-blue-500 hover:bg-blue-600 focus:ring-blue-500"
+                  }
+                `}
+                onClick={handleProcessDialog}
+              >
+                {dialogType === "block" ? "Block User" : "Unfriend"}
+              </button>
+            </div>
           </div>
         </div>
       </dialog>
