@@ -107,10 +107,12 @@ const Room = () => {
 
   return (
     <div className="pt-1 relative h-full">
-      <SearchRooms />
+      <div className="px-2">
+        <SearchRooms />
+      </div>
 
       {/* Room List */}
-      <ul className="mt-3 space-y-2 max-h-[calc(100vh-200px)] overflow-y-auto">
+      <ul className="mt-3 px-2 space-y-2 max-h-[calc(100vh-200px)] overflow-y-auto">
         {data &&
           data.length > 0 &&
           data.map((room) => (
