@@ -6,11 +6,10 @@ import { logout, verifyUser } from "../../lib/react_query/queries/user/user";
 import MenuIcon from "../../assets/icons/MenuIcon";
 import SettingIcon from "../../assets/icons/SettingIcon";
 import LogOutIcon from "../../assets/icons/LogOutIcon";
-import { createRef, useEffect } from "react";
+import { createRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  const dropdownMenu = useAppStore.getState().dropdownMenu;
   const dropdownParent = createRef<HTMLLIElement>();
   const toggleOpenSidebar = useAppStore((state) => state.toggleOpenSidebar);
   const toggleOpenDropdown = useAppStore((state) => state.toggleDropdownMenu);
@@ -30,23 +29,6 @@ const Navbar = () => {
     navigation("/login");
   };
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        !dropdownParent.current?.contains(e.target as Node) &&
-        !dropdownMenu.current?.contains(e.target as Node)
-      ) {
-        dropdownMenu.current?.classList.add("hidden");
-      }
-    };
-
-    document.addEventListener("click", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [dropdownMenu, dropdownParent]);
-
   return (
     <nav className="border p-4 flex justify-between items-center">
       <div className="flex items-center gap-2">
@@ -60,7 +42,7 @@ const Navbar = () => {
           <BellIcon w={40} h={40} />
         </li>
         <li
-          className="min-w-12 cursor-pointer relative"
+          className="min-w-12 cursor-pointer relative option-container"
           onClick={toggleOpenDropdown}
           ref={dropdownParent}
         >
