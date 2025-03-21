@@ -85,7 +85,7 @@ const Friends = () => {
   };
 
   return (
-    <div className="pt-1 px-2">
+    <div className="pt-1 px-2 h-full max-h-[calc(100vh-60px)] overflow-hidden md:max-h-full">
       <SearchUsers />
 
       {/* Friends List */}
@@ -97,7 +97,7 @@ const Friends = () => {
           </p>
         </div>
       ) : (
-        <ul className="mt-4 space-y-2 max-h-[calc(100vh-200px)] overflow-y-auto pr-1">
+        <ul className="mt-4 space-y-2 max-h-[calc(100vh-200px)] h-full overflow-y-auto pr-1 md:max-h-full">
           {data &&
             data.map((friend) => (
               <Friend

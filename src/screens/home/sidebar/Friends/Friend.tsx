@@ -1,4 +1,4 @@
-import { createRef, useEffect, useState } from "react";
+import { createRef } from "react";
 import DotMenuIcon from "../../../../assets/icons/DotMenuIcon";
 import Avatar from "../../../../components/Avatar";
 import UnfriendIcon from "../../../../assets/icons/UnfriendIcon";
@@ -17,29 +17,13 @@ const Friend = ({
   handleBlockUser,
   handleUnfriendUser,
 }: IProps) => {
-  const [showOptions, setShowOptions] = useState(false);
   const optionsContainer = createRef<HTMLDivElement>();
 
   const handleToggleOptions = () => {
-    setShowOptions((prev) => !prev);
+    if (optionsContainer.current) {
+      optionsContainer.current.classList.toggle("hidden");
+    }
   };
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        optionsContainer.current &&
-        !optionsContainer.current.contains(e.target as Node)
-      ) {
-        setShowOptions(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [optionsContainer]);
 
   return (
     <li className="group relative flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
@@ -58,38 +42,38 @@ const Friend = ({
       </div>
 
       <div
-        className="relative flex-shrink-0 p-1.5 rounded-full hover:bg-gray-100 transition-colors duration-200"
+        className="relative flex-shrink-0 p-1.5 rounded-full hover:bg-gray-100 transition-colors duration-200 option-container"
         onClick={handleToggleOptions}
-        ref={optionsContainer}
       >
         <DotMenuIcon w={20} h={20} />
 
-        {showOptions && (
-          <div className="absolute top-0 right-full mt-1 mr-2 z-50">
-            <div className="bg-white rounded-lg shadow-lg border border-gray-200 py-1.5 w-36">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleBlockUser(friend.id);
-                }}
-                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200"
-              >
-                <BlockIcon width={18} height={18} className="text-gray-500" />
-                <span>Block user</span>
-              </button>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleUnfriendUser(friend.id);
-                }}
-                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 hover:bg-gray-50 transition-colors duration-200"
-              >
-                <UnfriendIcon width={18} height={18} className="text-red-600" />
-                <span>Unfriend</span>
-              </button>
-            </div>
+        <div
+          ref={optionsContainer}
+          className="absolute top-0 right-full mt-1 mr-2 z-50 hidden"
+        >
+          <div className="bg-white rounded-lg shadow-lg border border-gray-200 py-1.5 w-36">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleBlockUser(friend.id);
+              }}
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+            >
+              <BlockIcon width={18} height={18} className="text-gray-500" />
+              <span>Block user</span>
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleUnfriendUser(friend.id);
+              }}
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 hover:bg-gray-50 transition-colors duration-200"
+            >
+              <UnfriendIcon width={18} height={18} className="text-red-600" />
+              <span>Unfriend</span>
+            </button>
           </div>
-        )}
+        </div>
       </div>
     </li>
   );
