@@ -60,6 +60,7 @@ const Navbar = () => {
               <li
                 className="flex gap-2 items-center px-4 py-3 cursor-pointer hover:bg-slate-200 active:bg-slate-300"
                 onClick={handleOpenAppSetting}
+                dialog-trigger="true"
               >
                 <SettingIcon width={20} height={20} /> Setting
               </li>

@@ -24,16 +24,9 @@ const AppSettings = () => {
   return (
     <dialog
       ref={useAppStore((state) => state.appSettingDialog)}
-      className="outline-none rounded-lg h-full w-full md:h-auto md:w-fit relative"
+      className="outline-none rounded-lg h-full w-full md:h-auto md:w-fit relative dialog"
     >
-      <span
-        className="absolute top-0 right-0 cursor-pointer bg-red-500 rounded-full p-1 active:bg-red-600 md:hidden"
-        onClick={handleCloseAppSetting}
-      >
-        <XIcon width={10} height={10} />
-      </span>
-
-      <div className="dialog-container h-full">
+      <div className="h-full">
         <h2 className="text-center mb-6 text-2xl font-semibold hidden">
           Settings
         </h2>
@@ -116,6 +109,13 @@ const AppSettings = () => {
           </div>
         </div>
       </div>
+
+      <span
+        className="absolute top-0 right-0 cursor-pointer bg-red-500 rounded-full p-1 active:bg-red-600 md:hidden"
+        onClick={handleCloseAppSetting}
+      >
+        <XIcon width={10} height={10} />
+      </span>
     </dialog>
   );
 };

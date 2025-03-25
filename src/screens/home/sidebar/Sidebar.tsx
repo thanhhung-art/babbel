@@ -7,7 +7,6 @@ import Friends from "./Friends/Friends";
 import Room from "./Room";
 import FriendRequestIcon from "../../../assets/icons/FriendRequestIcon";
 import FriendRequest from "./FriendRequests";
-import AppSettings from "../../../components/appSettings/AppSettings";
 import { useQuery } from "@tanstack/react-query";
 import { getFriendRequest } from "../../../utils/contants";
 import { getFriendRequestQuery } from "../../../lib/react_query/queries/user/friendRequest";
@@ -81,9 +80,6 @@ const Sidebar = () => {
           {currentTab === "room" && <Room />}
         </div>
       </main>
-
-      {/* Settings */}
-      <AppSettings />
     </div>
   );
 };
