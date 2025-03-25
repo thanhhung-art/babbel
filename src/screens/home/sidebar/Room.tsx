@@ -135,7 +135,7 @@ const Room = () => {
       </ul>
 
       {/* Create Room Button */}
-      <div className="absolute bottom-8 right-8">
+      <div className="absolute bottom-8 right-8" dialog-trigger="true">
         <div
           className="bg-blue-500 p-3 rounded-full cursor-pointer hover:bg-blue-600 active:bg-blue-700 transition-colors duration-200 shadow-lg"
           onClick={handleOpenModal}
@@ -145,8 +145,11 @@ const Room = () => {
       </div>
 
       {/* Create Room Dialog */}
-      <dialog ref={modalRef} className="rounded-xl w-full md:w-[450px] p-0">
-        <div className="dialog-container p-6">
+      <dialog
+        ref={modalRef}
+        className="rounded-xl w-full md:w-[450px] p-0 dialog"
+      >
+        <div className="p-6 border border-gray-200 bg-white rounded-lg shadow-lg">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-semibold text-gray-800">
               Create New Room

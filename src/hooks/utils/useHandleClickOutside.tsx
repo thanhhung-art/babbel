@@ -6,6 +6,7 @@ function useHandleClickOutside() {
       const popupContainers = document.querySelectorAll(".popup-container");
       const searchContainers = document.querySelectorAll(".search-container");
       const optionsContainers = document.querySelectorAll(".option-container");
+      const dialogs = document.querySelectorAll(".dialog");
 
       popupContainers.forEach((popupContainer) => {
         if (popupContainer instanceof HTMLElement) {
@@ -33,6 +34,20 @@ function useHandleClickOutside() {
             if (option instanceof HTMLElement) {
               option.classList.add("hidden");
             }
+          }
+        }
+      });
+
+      dialogs.forEach((dialog) => {
+        if (dialog instanceof HTMLDialogElement) {
+          const trigger = (e.target as HTMLElement).closest("[dialog-trigger]");
+          if (trigger) return;
+          const contentContainer = dialog.firstChild;
+          if (
+            contentContainer &&
+            !contentContainer.contains(e.target as Node)
+          ) {
+            dialog.close();
           }
         }
       });
