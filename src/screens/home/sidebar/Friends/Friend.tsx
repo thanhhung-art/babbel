@@ -3,7 +3,6 @@ import DotMenuIcon from "../../../../assets/icons/DotMenuIcon";
 import Avatar from "../../../../components/Avatar";
 import UnfriendIcon from "../../../../assets/icons/UnfriendIcon";
 import BlockIcon from "../../../../assets/icons/BlockIcon";
-
 interface IProps {
   friend: { id: string; name: string };
   handleGetConversation: (id: string) => void;

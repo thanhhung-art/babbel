@@ -14,6 +14,7 @@ import SearchUsers from "../../../../components/search/SearchUsers";
 
 const Friends = () => {
   const queryClient = useQueryClient();
+  const toggleOpenSideBar = useAppStore((state) => state.toggleOpenSidebar);
   const setCurrentFriendId = useAppStore((state) => state.setCurrentFriendId);
   const setCurrentRoomId = useAppStore((state) => state.setCurrentRoomId);
   const setCurrentConversationId = useAppStore(
@@ -57,6 +58,8 @@ const Friends = () => {
 
   const handleGetConversation = (friendId: string) => {
     getConversation.mutate(friendId);
+
+    toggleOpenSideBar();
   };
 
   const handleBlockUser = (friendId: string) => {
