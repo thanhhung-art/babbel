@@ -42,52 +42,52 @@ const Home = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.id]);
 
-  useEffect(() => {
-    const dialogs = document.querySelectorAll("dialog");
+  // useEffect(() => {
+  //   const dialogs = document.querySelectorAll("dialog");
 
-    const handleClickOutside = (e: MouseEvent) => {
-      const dialog = e.currentTarget as HTMLDialogElement;
-      const dialogContainer = dialog.querySelector(".dialog-container");
-      if (dialogContainer && !dialogContainer.contains(e.target as Node)) {
-        dialog.close();
-      }
-    };
+  //   const handleClickOutside = (e: MouseEvent) => {
+  //     const dialog = e.currentTarget as HTMLDialogElement;
+  //     const dialogContainer = dialog.querySelector(".dialog-container");
+  //     if (dialogContainer && !dialogContainer.contains(e.target as Node)) {
+  //       dialog.close();
+  //     }
+  //   };
 
-    const addListenerToDialog = (dialog: HTMLDialogElement) => {
-      dialog.addEventListener("click", handleClickOutside);
-    };
+  //   const addListenerToDialog = (dialog: HTMLDialogElement) => {
+  //     dialog.addEventListener("click", handleClickOutside);
+  //   };
 
-    const removeListenerFromDialog = (dialog: HTMLDialogElement) => {
-      dialog.removeEventListener("click", handleClickOutside);
-    };
+  //   const removeListenerFromDialog = (dialog: HTMLDialogElement) => {
+  //     dialog.removeEventListener("click", handleClickOutside);
+  //   };
 
-    dialogs.forEach(addListenerToDialog);
+  //   dialogs.forEach(addListenerToDialog);
 
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        mutation.addedNodes.forEach((node) => {
-          if (node instanceof HTMLDialogElement) {
-            addListenerToDialog(node);
-          }
-        });
-        mutation.removedNodes.forEach((node) => {
-          if (node instanceof HTMLDialogElement) {
-            removeListenerFromDialog(node);
-          }
-        });
-      });
-    });
+  //   const observer = new MutationObserver((mutations) => {
+  //     mutations.forEach((mutation) => {
+  //       mutation.addedNodes.forEach((node) => {
+  //         if (node instanceof HTMLDialogElement) {
+  //           addListenerToDialog(node);
+  //         }
+  //       });
+  //       mutation.removedNodes.forEach((node) => {
+  //         if (node instanceof HTMLDialogElement) {
+  //           removeListenerFromDialog(node);
+  //         }
+  //       });
+  //     });
+  //   });
 
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
+  //   observer.observe(document.body, {
+  //     childList: true,
+  //     subtree: true,
+  //   });
 
-    return () => {
-      observer.disconnect();
-      dialogs.forEach(removeListenerFromDialog);
-    };
-  });
+  //   return () => {
+  //     observer.disconnect();
+  //     dialogs.forEach(removeListenerFromDialog);
+  //   };
+  // });
 
   useHandleClickOutside();
 
