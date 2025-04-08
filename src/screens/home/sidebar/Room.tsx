@@ -16,7 +16,7 @@ const Room = () => {
   const setCurrentRoomId = useAppStore((state) => state.setCurrentRoomId);
   const setCurrentFriendId = useAppStore((state) => state.setCurrentFriendId);
   const setCurrConversationId = useAppStore(
-    (state) => state.setCurrentConversationId
+    (state) => state.setCurrentConversationId,
   );
   const modalRef = createRef<HTMLDialogElement>();
   const roomPrivate = createRef<HTMLInputElement>();
@@ -73,9 +73,9 @@ const Room = () => {
     e.preventDefault();
     const name = roomName.current?.value;
     const desc = roomDesc.current?.value;
-    const isPublic = roomPrivate.current?.checked;
+    const isPrivate = roomPrivate.current?.checked;
 
-    if (name && isPublic !== undefined) {
+    if (name && isPrivate !== undefined) {
       if (!name) {
         return;
       }
@@ -83,57 +83,26 @@ const Room = () => {
       const data = {
         name,
         avatar: "",
-        isPublic,
+        isPublic: !isPrivate,
         description: desc || "",
       };
 
-      await createRoomMutation.mutate(data);
+      createRoomMutation.mutate(data);
       modalRef.current?.close();
     }
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (data?.length === 0) {
     return (
-      <div className="mt-1">
-        {/* <Search type="room" /> */}
-        <p className="mt-4 text-center">No rooms joined</p>
+      <div className="h-full flex flex-col items-center justify-center p-4">
+        <div className="w-12 h-12 rounded-full border-4 border-gray-200 border-t-blue-500 animate-spin mb-4"></div>
+        <p className="text-gray-500">Loading your rooms...</p>
       </div>
     );
   }
 
-  return (
-    <div className="pt-1 relative h-full">
-      <div className="px-2">
-        <SearchRooms />
-      </div>
-
-      {/* Room List */}
-      <ul className="mt-3 px-2 space-y-2 max-h-[calc(100vh-200px)] overflow-y-auto">
-        {data &&
-          data.length > 0 &&
-          data.map((room) => (
-            <li
-              key={room.id}
-              className="flex gap-4 items-center p-3 cursor-pointer rounded-lg hover:bg-slate-100 transition-colors duration-200 shadow-sm border border-gray-100"
-              onClick={() => handleSetState(room.id)}
-            >
-              <Avatar width="w-12" height="h-12" name={room.name} />
-              <div>
-                <h4 className="font-medium text-gray-800">{room.name}</h4>
-                {/* {room.description && (
-                  <p className="text-sm text-gray-500 truncate max-w-[200px]">
-                    {room.description}
-                  </p>
-                )} */}
-              </div>
-            </li>
-          ))}
-      </ul>
-
+  const CreateRoom = () => (
+    <>
       {/* Create Room Button */}
       <div className="absolute bottom-8 right-8" dialog-trigger="true">
         <div
@@ -240,6 +209,77 @@ const Room = () => {
           </form>
         </div>
       </dialog>
+    </>
+  );
+
+  if (data?.length === 0) {
+    return (
+      <div className="relative h-full flex flex-col">
+        <div className="px-2 pt-2">
+          <SearchRooms />
+        </div>
+        <div className="flex-1 flex flex-col items-center justify-center">
+          <div className="text-center p-6 max-w-md">
+            <div className="bg-slate-100 rounded-full p-4 inline-block mb-4">
+              <svg
+                className="w-10 h-10 text-slate-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-lg font-medium text-gray-800 mb-2">
+              No rooms yet
+            </h3>
+            <p className="text-sm text-gray-500 mb-4">
+              Create a new room or search for existing ones to join
+              conversations.
+            </p>
+          </div>
+        </div>
+        <CreateRoom />
+      </div>
+    );
+  }
+
+  return (
+    <div className="pt-1 relative h-full">
+      <div className="px-2">
+        <SearchRooms />
+      </div>
+
+      {/* Room List */}
+      <ul className="mt-3 px-2 max-h-[calc(100vh-200px)] overflow-y-auto">
+        {data &&
+          data.length > 0 &&
+          data.map((room) => (
+            <li
+              key={room.id}
+              className="flex gap-4 items-center p-3 cursor-pointer rounded-lg hover:bg-slate-100 transition-colors duration-200"
+              onClick={() => handleSetState(room.id)}
+            >
+              <Avatar width="w-12" height="h-12" name={room.name} />
+              <div>
+                <h4 className="font-medium text-gray-800">{room.name}</h4>
+                {/* {room.description && (
+                  <p className="text-sm text-gray-500 truncate max-w-[200px]">
+                    {room.description}
+                  </p>
+                )} */}
+              </div>
+            </li>
+          ))}
+      </ul>
+
+      <CreateRoom />
     </div>
   );
 };

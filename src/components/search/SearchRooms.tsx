@@ -2,8 +2,11 @@ import { createRef, useMemo } from "react";
 import SearchIcon from "../../assets/icons/SearchIcon";
 import Avatar from "../Avatar";
 import useSearchRooms from "../../hooks/room/useSearchRooms";
-import { useQuery } from "@tanstack/react-query";
-import { getRoomsJoinedQuery } from "../../lib/react_query/queries/room/room";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  getRoomsJoinedQuery,
+  requestJoinRoomQuery,
+} from "../../lib/react_query/queries/room/room";
 import { roomsJoined } from "../../utils/contants";
 
 const SearchRooms = () => {
@@ -25,13 +28,25 @@ const SearchRooms = () => {
     [roomsJoinedData.data]
   );
 
+  const sendJoinRoomRequestMutation = useMutation({
+    mutationFn: (roomId: string) => {
+      return requestJoinRoomQuery(roomId);
+    },
+    onSuccess: () => {
+      console.log("Room joined successfully");
+    },
+    onError: (error) => {
+      console.error("Error joining room:", error);
+    },
+  });
+
   const handleOpenSearch = () => {
     dataResultsContainer.current?.classList.remove("hidden");
     dataResultsContainer.current?.classList.add("block");
   };
 
   const handleSendJoinRoom = (roomId: string) => {
-    console.log("Join room:", roomId);
+    sendJoinRoomRequestMutation.mutate(roomId);
   };
 
   const isRenderResults =
