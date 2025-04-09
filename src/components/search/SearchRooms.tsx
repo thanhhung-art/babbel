@@ -2,17 +2,18 @@ import { createRef, useMemo } from "react";
 import SearchIcon from "../../assets/icons/SearchIcon";
 import Avatar from "../Avatar";
 import useSearchRooms from "../../hooks/room/useSearchRooms";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getRoomsJoinedQuery,
   requestJoinRoomQuery,
 } from "../../lib/react_query/queries/room/room";
-import { roomsJoined } from "../../utils/contants";
+import { chatting, roomsJoined } from "../../utils/contants";
 
 const SearchRooms = () => {
   const inputValue = createRef<HTMLInputElement>();
   const searchContainer = createRef<HTMLDivElement>();
   const dataResultsContainer = createRef<HTMLDivElement>();
+  const queryClient = useQueryClient();
 
   const { searchRoomsMutation, handleSendSearch } = useSearchRooms({
     inputValue,
@@ -33,7 +34,8 @@ const SearchRooms = () => {
       return requestJoinRoomQuery(roomId);
     },
     onSuccess: () => {
-      console.log("Room joined successfully");
+      queryClient.invalidateQueries({ queryKey: [roomsJoined] });
+      queryClient.invalidateQueries({ queryKey: [chatting] });
     },
     onError: (error) => {
       console.error("Error joining room:", error);
