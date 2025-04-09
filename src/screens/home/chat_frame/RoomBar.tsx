@@ -39,7 +39,8 @@ const RoomBar = () => {
   const leaveRoomMutation = useMutation({
     mutationFn: () => leaveRoomQuery(currRoomId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [chatting, roomsJoined] });
+      queryClient.invalidateQueries({ queryKey: [chatting] });
+      queryClient.invalidateQueries({ queryKey: [roomsJoined] });
     },
   });
 
