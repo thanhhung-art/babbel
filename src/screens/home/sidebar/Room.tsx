@@ -18,6 +18,7 @@ const Room = () => {
   const setCurrConversationId = useAppStore(
     (state) => state.setCurrentConversationId,
   );
+  const toggleOpenSidebar = useAppStore((state) => state.toggleOpenSidebar);
   const modalRef = createRef<HTMLDialogElement>();
   const roomPrivate = createRef<HTMLInputElement>();
   const roomName = createRef<HTMLInputElement>();
@@ -57,6 +58,7 @@ const Room = () => {
     setCurrentFriendId("");
     setCurrConversationId("");
     addToChatMutation.mutate(roomId);
+    toggleOpenSidebar(); // Close the sidebar when a room is clicked
   };
 
   const handleOpenModal = () => {
