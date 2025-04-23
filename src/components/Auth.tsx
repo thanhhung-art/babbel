@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { ReactElement, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { socket } from "../SocketContext/socket";
+import { chatSocket } from "../SocketContext/socket";
 import { verifyUser } from "../lib/react_query/queries/user/user";
 
 const Auth = ({ children }: { children: ReactElement }) => {
@@ -21,7 +21,7 @@ const Auth = ({ children }: { children: ReactElement }) => {
   useEffect(() => {
     if (isFetched) {
       if (!data) {
-        socket.disconnect();
+        chatSocket.disconnect();
         navigation("/login");
       }
     }

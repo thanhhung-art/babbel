@@ -7,7 +7,7 @@ import {
   Suspense,
 } from "react";
 import { SendIcon } from "../../../assets/icons/SendIcon";
-import { socket } from "../../../SocketContext/socket";
+import { chatSocket } from "../../../SocketContext/socket";
 import useAppStore from "../../../lib/zustand/store";
 //import FileIcon from "../../../assets/icons/FileIcon";
 import Arrow from "../../../assets/icons/Arrow";
@@ -56,14 +56,14 @@ const MessageInput = () => {
           .filter((url) => url);
       }
       if (currConversationId && currentFriendId) {
-        socket.emit("send-message-to-user", {
+        chatSocket.emit("send-message-to-user", {
           conversationId: currConversationId,
           friendId: currentFriendId,
           content: inputRef.current.value,
           urls,
         });
       } else {
-        socket.emit("send-message-to-room", {
+        chatSocket.emit("send-message-to-room", {
           roomId: currentRoomId,
           content: inputRef.current?.value,
           urls,
@@ -80,7 +80,7 @@ const MessageInput = () => {
 
   const handleTypingMessage = (isTyping: boolean) => {
     if (currConversationId && currentFriendId) {
-      socket.emit("typing-message-to-friend", {
+      chatSocket.emit("typing-message-to-friend", {
         conversationId: currConversationId,
         friendId: currentFriendId,
         isTyping,
@@ -171,7 +171,7 @@ const MessageInput = () => {
   }, []);
 
   useEffect(() => {
-    socket.on(
+    chatSocket.on(
       "friend-typing-message",
       ({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -186,7 +186,7 @@ const MessageInput = () => {
     );
 
     return () => {
-      socket.off("friend-typing-message");
+      chatSocket.off("friend-typing-message");
     };
   }, []);
 

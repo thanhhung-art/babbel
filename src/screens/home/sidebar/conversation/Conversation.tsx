@@ -1,7 +1,7 @@
 import { createRef, useMemo } from "react";
 import useAppStore from "../../../../lib/zustand/store";
 import Avatar from "../../../../components/Avatar";
-import { socket } from "../../../../SocketContext/socket";
+import { chatSocket } from "../../../../SocketContext/socket";
 import DotMenuIcon from "../../../../assets/icons/DotMenuIcon";
 import DeleteIcon from "../../../../assets/icons/DeleteIcon";
 import { useQuery } from "@tanstack/react-query";
@@ -86,7 +86,7 @@ const Conversation = ({
       setCurrentRoomId(roomId);
       setCurrentFriendId("");
       setCurrentConversationId("");
-      socket.emit("join-room", roomId);
+      chatSocket.emit("join-room", roomId);
     }
 
     toggleOpenSideBar();

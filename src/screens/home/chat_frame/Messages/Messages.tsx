@@ -3,7 +3,7 @@ import { conversationMessages, user } from "../../../../utils/contants";
 import useAppStore from "../../../../lib/zustand/store";
 import { createRef, useEffect, useRef, useState } from "react";
 import { IMessage } from "../../../../types/message";
-import { socket } from "../../../../SocketContext/socket";
+import { chatSocket } from "../../../../SocketContext/socket";
 import Message from "././Message";
 import { verifyUser } from "../../../../lib/react_query/queries/user/user";
 import { getConversationMessagesQuery } from "../../../../lib/react_query/queries/user/friend";
@@ -54,14 +54,14 @@ const Messages = () => {
       messages[index].content = textAreaRef.current.value;
       setMessages([...messages]);
       if (currentConversationId) {
-        socket.emit("update-message-in-conversation", {
+        chatSocket.emit("update-message-in-conversation", {
           messId: messages[index].id,
           value: textAreaRef.current.value,
           friendId: currentFriendId,
           conversationId: currentConversationId,
         });
       } else {
-        socket.emit("update-message-in-room", {
+        chatSocket.emit("update-message-in-room", {
           messId: messages[index].id,
           value: textAreaRef.current.value,
           roomId: currentRoomId,
@@ -88,12 +88,12 @@ const Messages = () => {
         prev.filter((m) => m.id !== idMessageToDelete.current)
       );
       if (currentConversationId) {
-        socket.emit("delete-message-in-conversation", {
+        chatSocket.emit("delete-message-in-conversation", {
           messId: idMessageToDelete.current,
           friendId: currentFriendId,
         });
       } else {
-        socket.emit("delete-message-in-room", {
+        chatSocket.emit("delete-message-in-room", {
           messId: idMessageToDelete.current,
           roomId: currentRoomId,
         });
@@ -121,11 +121,11 @@ const Messages = () => {
   }, [messages, anchorRef]);
 
   useEffect(() => {
-    socket.on("new-message-from-friend", (message: IMessage) => {
+    chatSocket.on("new-message-from-friend", (message: IMessage) => {
       setMessages((prev) => [...prev, message]);
     });
 
-    socket.on("update-message-in-conversation", (message: IMessage) => {
+    chatSocket.on("update-message-in-conversation", (message: IMessage) => {
       if (currentConversationId === message.conversationId) {
         const index = messages.findIndex((m) => m.id === message.id);
         if (index > -1) {
@@ -136,7 +136,7 @@ const Messages = () => {
       }
     });
 
-    socket.on(
+    chatSocket.on(
       "delete-message-in-conversation",
       (messageId: string, conversationId: string) => {
         if (currentConversationId === conversationId)
@@ -144,12 +144,12 @@ const Messages = () => {
       }
     );
 
-    socket.on("new-message-to-room", (message: IMessage) => {
+    chatSocket.on("new-message-to-room", (message: IMessage) => {
       if (currentRoomId === message.roomId)
         setMessages((prev) => [...prev, message]);
     });
 
-    socket.on("update-message-in-room", (message: IMessage) => {
+    chatSocket.on("update-message-in-room", (message: IMessage) => {
       if (currentRoomId === message.roomId) {
         const index = messages.findIndex((m) => m.id === message.id);
         if (index > -1) {
@@ -159,18 +159,18 @@ const Messages = () => {
       }
     });
 
-    socket.on("delete-message-in-room", (messageId: string, roomId: string) => {
+    chatSocket.on("delete-message-in-room", (messageId: string, roomId: string) => {
       if (currentRoomId === roomId)
         setMessages((prev) => prev.filter((m) => m.id !== messageId));
     });
 
     return () => {
-      socket.off("new-message-from-friend");
-      socket.off("update-message-in-conversation");
-      socket.off("delete-message-in-conversation");
-      socket.off("update-message-in-room");
-      socket.off("delete-message-in-room");
-      socket.off("new-message-to-room");
+      chatSocket.off("new-message-from-friend");
+      chatSocket.off("update-message-in-conversation");
+      chatSocket.off("delete-message-in-conversation");
+      chatSocket.off("update-message-in-room");
+      chatSocket.off("delete-message-in-room");
+      chatSocket.off("new-message-to-room");
     };
   }, [messages, currentConversationId, currentRoomId]);
 
