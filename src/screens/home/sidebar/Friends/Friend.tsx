@@ -1,8 +1,9 @@
-import { createRef } from "react";
+import { createRef, useMemo } from "react";
 import DotMenuIcon from "../../../../assets/icons/DotMenuIcon";
 import Avatar from "../../../../components/Avatar";
 import UnfriendIcon from "../../../../assets/icons/UnfriendIcon";
 import BlockIcon from "../../../../assets/icons/BlockIcon";
+import useAppStore from "../../../../lib/zustand/store";
 interface IProps {
   friend: { id: string; name: string };
   handleGetConversation: (id: string) => void;
@@ -17,6 +18,12 @@ const Friend = ({
   handleUnfriendUser,
 }: IProps) => {
   const optionsContainer = createRef<HTMLDivElement>();
+  const onlineFriends = useAppStore((state) => state.onlineFriends);
+
+  const isUserOnline = useMemo(() => {
+    if (!friend.id) return false;
+    return onlineFriends.includes(friend.id);
+  }, [friend.id, onlineFriends]);
 
   const handleToggleOptions = () => {
     if (optionsContainer.current) {
@@ -32,11 +39,15 @@ const Friend = ({
       >
         <div className="relative flex-shrink-0">
           <Avatar width="w-11" height="h-11" name={friend.name} />
-          <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white shadow-sm" />
+          {isUserOnline && (
+            <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white shadow-sm" />
+          )}
         </div>
         <div className="min-w-0">
           <h4 className="font-medium text-gray-900 truncate">{friend.name}</h4>
-          <p className="text-sm text-gray-500">Online</p>
+          <p className="text-sm text-gray-500">
+            {isUserOnline ? "Online" : "Offline"}
+          </p>
         </div>
       </div>
 
