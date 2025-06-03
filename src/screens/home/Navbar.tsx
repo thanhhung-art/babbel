@@ -30,7 +30,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="border p-4 flex justify-between items-center">
+    <nav className="p-4 flex justify-between items-center">
       <div className="flex items-center gap-2">
         <div className="md:hidden" onClick={toggleOpenSidebar}>
           <MenuIcon width={30} height={30} />
