@@ -24,7 +24,7 @@ const AppSettings = () => {
   return (
     <dialog
       ref={useAppStore((state) => state.appSettingDialog)}
-      className="outline-none rounded-lg h-full w-full md:h-auto md:w-fit relative dialog"
+      className="outline-none rounded-lg h-full w-full border md:h-auto md:w-fit relative dialog"
     >
       <div className="h-full">
         <h2 className="text-center mb-6 text-2xl font-semibold hidden">

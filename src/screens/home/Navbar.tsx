@@ -53,7 +53,7 @@ const Navbar = () => {
             avatar={data?.avatar}
           />
           <div
-            className="hidden absolute top-full right-0 mt-2 bg-white border rounded shadow-md z-50 "
+            className="hidden absolute top-full right-0 mt-2 bg-white rounded shadow-md z-50 "
             ref={useAppStore((state) => state.dropdownMenu)}
           >
             <ul className="">
